@@ -1,0 +1,1 @@
+{"name":"SoftSPI","provides":"SoftSPI.h","license":"LICENSE.md","readme":"README.md","description":"Software SPI implementation","category":"Communication","subcategory":"Serial","maintainer":"Matt Jenkins <matt@majenko.co.uk>","version":"1.0.3","family":"all","core":"all","install":{"examples":"\/","library.properties":"\/","src":"\/"}}
