@@ -8,7 +8,7 @@ Download the mobile app
 
 
 Connect to the board
-![](../image/app_Connect.png)
+![](../../image/app_Connect.png)
 
 Transmit Data
-![](../image/app_tx.png)
+![](../../image/app_tx.png)
