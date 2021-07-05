@@ -3,8 +3,31 @@
 
 默认使用示例为**Arduino**,同时也支持[**nRF5-SDK**](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download)
 
-## 如何使用
-### 使用**Arduino IDE**
+The default example is **Arduino**, which also supports [**nRF5-SDK**](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download)
+
+
+<h3 align = "left">产品 📷:</h3>
+
+|    产品    |                               产品链接                               | 原理图 |
+| :--------: | :------------------------------------------------------------------: | :----: |
+| [T-Echo]() | [Product link](https://pt.aliexpress.com/item/1005002842456390.html) |        |
+
+<h3 align = "left">引脚 :</h3>
+
+- See [utilities.h](examples/Integration/utilities.h)
+
+<h3 align = "left">应用 :</h3>
+
+- [T-Echo SoftRF](https://github.com/lyusupov/SoftRF/wiki/Badge-Edition)
+- [T-Echo Meshtastic](https://github.com/meshtastic/Meshtastic-device/tree/v1.2.42.2759c8d)
+
+
+
+
+
+
+
+## 使用**Arduino IDE**
 1. 下载并且安装CH340驱动程序
    - [CH340 Drivers](http://www.wch-ic.com/search?q=ch340&t=downloads)
 2. 打开Arduino,打开首选项 -> 添加https://www.adafruit.com/package_adafruit_index.json 到 板安装管理器地址列表
