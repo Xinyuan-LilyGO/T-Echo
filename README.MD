@@ -14,7 +14,21 @@ The default example is **Arduino**, which also supports [**nRF5-SDK**](https://w
 4. Copy all the folders in the lib directory to `"C:\User\<YourName>\Documents\Arduino\libraries"`
 5. Open the sketch => tool => port, select the port of the connected board, and click upload
 
-### Use PlatformIO , just open it, and it will automatically download Adafruit_nRF52_Arduino for the first use
+<h3 align = "left">Product 📷:</h3>
+
+|           Product           |                              Product  Link                              |                            Schematic                            |
+| :-------------------------: | :---------------------------------------------------------------------: | :-------------------------------------------------------------: |
+|          [T-Echo]()         |  [Product link](https://pt.aliexpress.com/item/1005002842456390.html)   |                                                                 | 
+
+<h3 align = "left">PinOut :</h3>
+
+- See [utilities.h](examples/Integration/utilities.h)
+
+<h3 align = "left">Application :</h3>
+
+- [T-Echo SoftRF](https://github.com/lyusupov/SoftRF/wiki/Badge-Edition)
+- [T-Beam Meshtastic](https://github.com/meshtastic/Meshtastic-device/tree/v1.2.42.2759c8d)
+
 
 ## Precautions:
 1. Need to use the files in the **lib** directory, it includes:
