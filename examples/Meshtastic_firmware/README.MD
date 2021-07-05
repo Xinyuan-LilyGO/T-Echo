@@ -2,7 +2,7 @@
 
 ### Double-click reset to operate as shown in the figure below
 
-![](../image/Meshtastic_pull.png)
+![](../../image/Meshtastic_pull.png)
 
 
 - [T-Echo Meshtastic](https://github.com/meshtastic/Meshtastic-device/tree/v1.2.42.2759c8d)

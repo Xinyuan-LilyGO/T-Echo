@@ -3,7 +3,7 @@
 Double-click the reset button to pull the file into the popover's directory
 
 
-![](../image/drag.png)
+![](../../image/drag.png)
 
 
 - [T-Echo SoftRF](https://github.com/lyusupov/SoftRF)
