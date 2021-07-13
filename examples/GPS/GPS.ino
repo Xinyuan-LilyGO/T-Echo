@@ -1,7 +1,4 @@
-/*
- * nRF52840Allfunction.ino: Demonstrate nRF full-function example
- * Copyright 2020 Kaibin he
- */
+
 
 /*******************************************************
        ______ ______  _____  _____  _____    ___  _____

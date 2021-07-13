@@ -1,7 +1,3 @@
-/*
- * nRF52840Allfunction.ino: Demonstrate nRF full-function example
- * Copyright 2020 Lewis he
- */
 
 /*******************************************************
        ______ ______  _____  _____  _____    ___  _____
@@ -234,9 +230,9 @@ void setupDisplay()
 // is received by the module
 // IMPORTANT: this function MUST be 'void' type
 //            and MUST NOT have any arguments!
-void setFlag(void)  //接收到数据执行的函数
+void setFlag(void)  
 {
-    // check if the interrupt is enabled  如果禁用了中断，退出函数
+    // check if the interrupt is enabled  
     if (!enableInterrupt) {
         return;
     }

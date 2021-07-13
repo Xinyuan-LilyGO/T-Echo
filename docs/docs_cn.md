@@ -59,3 +59,4 @@ The default example is **Arduino**, which also supports [**nRF5-SDK**](https://w
 3. 如果需要使用**nRF5-SDK**进行编程,请点击链接下载[**nRF5-SDK**](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download)
 
 4. **Adafruit_nRF52_Arduino**中不支持**NFC**功能,请用[**nRF5-SDK**](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download)进行编程
+5. FLASH将根据供货情况选择MX25R1635FZUIL0或者ZD25WQ16B。使用时注意区别。
