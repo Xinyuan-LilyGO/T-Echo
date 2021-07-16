@@ -13,7 +13,8 @@ The default example is **Arduino**, which also supports [**nRF5-SDK**](https://w
 
 <h3 align = "left">PinOut :</h3>
 
-- See [utilities.h](examples/Integration/utilities.h)
+![](image/T-ECHO.jpg)
+
 
 <h3 align = "left">Application :</h3>
 
@@ -25,11 +26,11 @@ The default example is **Arduino**, which also supports [**nRF5-SDK**](https://w
 ## Using Arduino IDE
 1. Download and install the CH340 driver 
    - [CH340 Drivers](http://www.wch-ic.com/search?q=ch340&t=downloads)
-1. Open Arduino, open preferences-> add https://www.adafruit.com/package_adafruit_index.json to the board installation manager address list
-2. Open the board installation manager, wait for the index update to complete, select 'Adafruit nRF52 by Adafruit' and click install
-3. After the installation is complete, select 'Nordic nRF52840(PCA10056)' in the board list
-4. Copy all the folders in the lib directory to `"C:\User\<YourName>\Documents\Arduino\libraries"`
-5. Open the sketch => tool => port, select the port of the connected board, and click upload
+2. Open Arduino, open preferences-> add https://www.adafruit.com/package_adafruit_index.json to the board installation manager address list
+3. Open the board installation manager, wait for the index update to complete, select 'Adafruit nRF52 by Adafruit' and click install
+4. After the installation is complete, select 'Nordic nRF52840(PCA10056)' in the board list
+5. Copy all the folders in the lib directory to `"C:\User\<YourName>\Documents\Arduino\libraries"`
+6. Open the sketch => tool => port, select the port of the connected board, and click upload
 
 
 ## Precautions:
