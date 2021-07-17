@@ -7,9 +7,9 @@ The default example is **Arduino**, which also supports [**nRF5-SDK**](https://w
 
 <h3 align = "left">Product 📷:</h3>
 
-|  Product   |                            Product  Link                             | Schematic |
-| :--------: | :------------------------------------------------------------------: | :-------: |
-| [T-Echo]() | [Product link](https://pt.aliexpress.com/item/1005002842456390.html) |           |
+|  Product   |                                                                                                Product  Link                                                                                                 |
+| :--------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| [T-Echo]() | [AliExpress](https://pt.aliexpress.com/item/1005002842456390.html)  [Amazon](https://www.amazon.com/dp/B097T4QGCT?ref=myi_title_dp) [Tindie](https://www.tindie.com/products/lilygo/lilygo-t-echo-nrf52840/) |
 
 <h3 align = "left">PinOut :</h3>
 
