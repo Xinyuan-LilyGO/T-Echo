@@ -2,7 +2,7 @@
 
 ## **English | [中文](docs/docs_cn.md)**
 
-The default example is **Arduino**, which also supports [**nRF5-SDK**](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download)
+The default example is **Arduino**.Pins on boards are not compatible with the official SDK.If you want to use the SDK, pay special attention to the pin definition.
 
 
 <h3 align = "left">Product 📷:</h3>
