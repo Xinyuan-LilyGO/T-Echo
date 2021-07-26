@@ -59,3 +59,5 @@
 
 5. **NFC Function** is not supported in **Adafruit_nRF52_Arduino**, please use [**nRF5-SDK**](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download) for programming
 6. Flash will choose MX25R1635FZUIL0 or ZD25WQ16B according to the availability.Pay attention to the difference when using.
+7. If you need to burn boatload. You can refer to [Burning boatload](bootloader/README.MD)
+
