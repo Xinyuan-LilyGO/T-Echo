@@ -2,7 +2,7 @@
 
 ## Burning boatload
 
-1. If you have downloaded j-Link Flash, you can skip this step. Otherwise, you need to download [J-Link Flash](lilygo_techo_bootloader-0.5.0_s140_6.1.1.hexhttps://www.segger.com/products/debug-probes/j-link/technology/flash-download)
+1. If you have downloaded j-Link Flash, you can skip this step. Otherwise, you need to download [J-Link Flash](https://www.segger.com/products/debug-probes/j-link/technology/flash-download/))
 2. Open J-Flash Lite and select NRF52840_XXAA on the device.The diagram below.
 ![](../image/bootloader-1.jpg)
 
