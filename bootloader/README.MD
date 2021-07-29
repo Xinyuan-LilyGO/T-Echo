@@ -4,7 +4,7 @@
 
 
 
-###Use j-Link Flash
+### Use j-Link Flash
 1. **If you have downloaded j-Link Flash, you can skip this step. Otherwise, you need to download [J-Link Flash](https://www.segger.com/products/debug-probes/j-link/technology/flash-download/)**
 2. **You need to use the SWD interface to connect to the board as shown**
 ![](../image/bootloader-0.jpg)
@@ -14,7 +14,7 @@
 ![](../image/bootloader-2.jpg)
 
 
-###Use Arduino IDE
+### Use Arduino IDE
 
 1. You need to refer to[Using Arduino IDE](https://github.com/Xinyuan-LilyGO).
 2. You need to use`LilyGO-T-Echo/bootloader/lilygo_techo_bootloader-0.5.0_s140_6.1.1. Hex`Replace `Arduino\hardware\Adafruit\Adafruit_nRF52_Arduino\bootloader\ pCA10056`.
