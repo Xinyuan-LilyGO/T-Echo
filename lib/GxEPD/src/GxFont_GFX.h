@@ -31,13 +31,13 @@
 #include <Adafruit_GFX.h>
 
 // select the library/libraries to add, none to preserve code space
-//#include <U8g2_for_Adafruit_GFX.h>
+#include "U8g2_for_Adafruit_GFX.h"
 //#include <Adafruit_ftGFX.h>
 //#include <GxFont_GFX_TFT_eSPI.h>
 
 class GxFont_GFX : public Adafruit_GFX
 {
-  public:
+public:
     GxFont_GFX(int16_t w, int16_t h);
     void setFont(const GFXfont *f = NULL);
 #if defined(U8g2_for_Adafruit_GFX_h)
@@ -99,84 +99,80 @@ class GxFont_GFX : public Adafruit_GFX
     int16_t drawString(const char *string, int poX, int poY, int font);
     int16_t drawString(const char *string, int poX, int poY);
     // Handle String type
-    int16_t drawString(const String& string, int poX, int poY, int font);
-    int16_t drawString(const String& string, int poX, int poY);
+    int16_t drawString(const String &string, int poX, int poY, int font);
+    int16_t drawString(const String &string, int poX, int poY);
     int16_t textWidth(const char *string, int font);
     int16_t textWidth(const char *string);
-    int16_t textWidth(const String& string, int font);
-    int16_t textWidth(const String& string);
+    int16_t textWidth(const String &string, int font);
+    int16_t textWidth(const String &string);
     int16_t fontHeight(int16_t font);
 #endif
-  private:
+private:
 #if defined(U8g2_for_Adafruit_GFX_h)
     class U8G2_FONTS_GFX : public U8G2_FOR_ADAFRUIT_GFX
     {
-      public:
-        U8G2_FONTS_GFX(Adafruit_GFX& gfx) : _gfx(gfx)
+    public:
+        U8G2_FONTS_GFX(Adafruit_GFX &gfx) : _gfx(gfx)
         {
-          begin(gfx);
+            begin(gfx);
         };
         void drawPixel(int16_t x, int16_t y, uint16_t color)
         {
-          _gfx.drawPixel(x, y, color);
+            _gfx.drawPixel(x, y, color);
         };
         size_t write(uint8_t v)
         {
-          if (v == '\n') // Newline?
-          {
-            switch (u8g2.font_decode.dir)
-            {
-              case 0:
-                tx = 0;
-                ty += u8g2.font_info.max_char_height;
-                break;
-              // these need to be verified
-              case 1:
-                tx += u8g2.font_info.max_char_height;
-                ty = 0;
-                break;
-              case 2:
-                tx = 0;
-                ty -= u8g2.font_info.max_char_height;
-                break;
-              case 3:
-                tx -= u8g2.font_info.max_char_height;
-                ty = 0;
-                break;
+            if (v == '\n') { // Newline?
+                switch (u8g2.font_decode.dir) {
+                case 0:
+                    tx = 0;
+                    ty += u8g2.font_info.max_char_height;
+                    break;
+                // these need to be verified
+                case 1:
+                    tx += u8g2.font_info.max_char_height;
+                    ty = 0;
+                    break;
+                case 2:
+                    tx = 0;
+                    ty -= u8g2.font_info.max_char_height;
+                    break;
+                case 3:
+                    tx -= u8g2.font_info.max_char_height;
+                    ty = 0;
+                    break;
+                }
+                return 1;
+            } else {
+                return U8G2_FOR_ADAFRUIT_GFX::write(v);
             }
-            return 1;
-          }
-          else
-          {
-            return U8G2_FOR_ADAFRUIT_GFX::write(v);
-          }
         };
-      private:
-        Adafruit_GFX& _gfx;
+    private:
+        Adafruit_GFX &_gfx;
     };
     U8G2_FONTS_GFX _U8G2_FONTS_GFX;
 #endif
 #if defined(_ADAFRUIT_TF_GFX_H_)
     class GxF_Adafruit_ftGFX : public Adafruit_ftGFX
     {
-      public:
-        GxF_Adafruit_ftGFX(GxFont_GFX& container, int16_t w, int16_t h) : Adafruit_ftGFX(w, h), _container(container) {};
+    public:
+        GxF_Adafruit_ftGFX(GxFont_GFX &container, int16_t w, int16_t h) : Adafruit_ftGFX(w, h), _container(container) {};
         void drawPixel(int16_t x, int16_t y, uint16_t color);
-      private:
-        GxFont_GFX& _container;
+    private:
+        GxFont_GFX &_container;
     };
     GxF_Adafruit_ftGFX _GxF_Adafruit_ftGFX;
 #endif
 #if defined(_GxFont_GFX_TFT_eSPI_H_)
     class GxF_GxFont_GFX_TFT_eSPI : public GxFont_GFX_TFT_eSPI
     {
-      public:
-        GxF_GxFont_GFX_TFT_eSPI(GxFont_GFX& container, int16_t w, int16_t h) : GxFont_GFX_TFT_eSPI(w, h), _container(container) {};
+    public:
+        GxF_GxFont_GFX_TFT_eSPI(GxFont_GFX &container, int16_t w, int16_t h) : GxFont_GFX_TFT_eSPI(w, h), _container(container) {};
         void drawPixel(uint32_t x, uint32_t y, uint32_t color);
         void drawFastHLine(int32_t x, int32_t y, int32_t w, uint32_t color);
         void fillRect(int32_t x, int32_t y, int32_t w, int32_t h, uint32_t color);
-      private:
-        GxFont_GFX& _container;
+    private:
+        GxFont_GFX &_container;
     };
     GxF_GxFont_GFX_TFT_eSPI _GxF_GxFont_GFX_TFT_eSPI;
 #endif
