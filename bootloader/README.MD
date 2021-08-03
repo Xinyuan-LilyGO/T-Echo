@@ -16,7 +16,7 @@
 
 ### Use Arduino IDE
 
-1. You need to refer to[Using Arduino IDE](https://github.com/Xinyuan-LilyGO).
+1. You need to refer to[Using Arduino IDE](https://github.com/Xinyuan-LilyGO/LilyGO-T-Echo#using-arduino-ide).
 2. You need to use`LilyGO-T-Echo/bootloader/lilygo_techo_bootloader-0.5.0_s140_6.1.1. Hex`Replace `Arduino\hardware\Adafruit\Adafruit_nRF52_Arduino\bootloader\ pCA10056`.
 3. [Please reference](https://github.com/adafruit/Adafruit_nRF52_Arduino#update-bootloader-with-dfu).
 
