@@ -11,7 +11,12 @@
 5. Copy all the folders in the lib directory to `"C:\User\<YourName>\Documents\Arduino\libraries"`
 6. Open the sketch => tool => port, select the port of the connected board, and click upload
 
+## USE PlatformIO
 
+1. Install[VSCODE](https://code.visualstudio.com/)and[Python](https://www.python.org/)
+2. Search for the PlatformIO plug-in in the VSCODE extension and install it.
+3. After the installation is complete and the reload is completed, there will be a small house icon in the lower left corner. Click to display the Platformio IDE home page
+4. Go to file - > Open folder - > Select the LilyGO-T-ECHO folder and click the (√) symbol in the lower left corner to compile (→) for upload.
 
 
 
