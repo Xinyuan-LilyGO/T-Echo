@@ -28,8 +28,7 @@ The default example is **Arduino**, which also supports [**nRF5-SDK**](https://w
 
 
 ## 使用**Arduino IDE**
-1. 下载并且安装CH340驱动程序
-   - [CH340 Drivers](http://www.wch-ic.com/search?q=ch340&t=downloads)
+1. 下载[Arduino IDE](https://www.arduino.cc/en/software)
 2. 打开Arduino,打开首选项 -> 添加https://www.adafruit.com/package_adafruit_index.json 到 板安装管理器地址列表
 3. 打开板子安装管理器中,等待索引更新完成,选择'Adafruit nRF52 by Adafruit'点击安装
 4. 安装完成后,在板子列表中选择'Nordic nRF52840(PCA10056)'
