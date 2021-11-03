@@ -42,6 +42,7 @@ void loopGPS();
 void configVDD(void);
 void boardInit();
 void LilyGo_logo();
+void enableBacklight(bool en);
 
 void setup()
 {

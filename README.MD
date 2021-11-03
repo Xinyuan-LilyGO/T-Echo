@@ -41,6 +41,7 @@
 
 ## Precautions:
 1. Need to use the files in the **lib** directory, it includes:
+   - [`arduino-lmic`](https://github.com/mcci-catena/arduino-lmic)
    - `AceButton` 
    - `Adafruit_BME280_Library`   
    - `Adafruit_BusIO`        

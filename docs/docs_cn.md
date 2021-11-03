@@ -43,6 +43,7 @@ The default example is **Arduino**, which also supports [**nRF5-SDK**](https://w
 
 ## 注意事项:
 1. 需要使用**lib**目录中的文件,它包括:
+   - [`arduino-lmic`](https://github.com/mcci-catena/arduino-lmic)
    - `AceButton` 
    - `Adafruit_BME280_Library`   
    - `Adafruit_BusIO`        
