@@ -71,9 +71,11 @@
 Current consumption from 3.7 Volt battery:
 
 |  Mode                   |     Average current     |
+| :---------------------: | :---------------------: |
 | Active backlight OFF	  |         42 mA           |
 | Active backlight ON	  |         55 mA           |
-| 	       Sleep	        |         0.25 mA         |
+| 	 Sleep	          |         0.25 mA         |
+| :---------------------: | :---------------------: |
 	
 
 
