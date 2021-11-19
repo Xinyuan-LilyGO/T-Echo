@@ -66,3 +66,19 @@
 6. Flash will choose MX25R1635FZUIL0 or ZD25WQ16B according to the availability.Pay attention to the difference when using.
 7. If you need to burn boatload. You can refer to [Burning boatload](bootloader/README.MD)
 
+
+## Battery life
+Current consumption from 3.7 Volt battery:
+
+|  Mode                   |     Average current     |
+| :---------------------: | :---------------------: |
+| Active backlight OFF	  |         42 mA           |
+| :---------------------: | :---------------------: |
+| Active backlight ON	  |         55 mA           |
+| :---------------------: | :---------------------: |
+| 	       Sleep	        |         0.25 mA         |
+| :---------------------: | :---------------------: |
+	
+
+
+Operating time from a full charge depends on your actual battery capacity.
