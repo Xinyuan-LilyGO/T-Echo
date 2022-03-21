@@ -74,7 +74,7 @@
 #define Power_Enable_Pin    _PINNUM(0,12)
 #else
 #define Power_Enable_Pin    _PINNUM(0,12)
-#define Power_Enable1_Pin   _PINNUM(0,13)
+//#define Power_Enable1_Pin   _PINNUM(0,13)
 #endif
 
 

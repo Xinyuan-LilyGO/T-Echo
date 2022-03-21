@@ -34,13 +34,13 @@
 
 class GxGDEH029A1 : public GxEPD
 {
-public:
+  public:
 #if defined(ESP8266)
     //GxGDEH029A1(GxIO& io, int8_t rst = D4, int8_t busy = D2);
     // use pin numbers, other ESP8266 than Wemos may not use Dx names
-    GxGDEH029A1(GxIO &io, int8_t rst = 2, int8_t busy = 4);
+    GxGDEH029A1(GxIO& io, int8_t rst = 2, int8_t busy = 4);
 #else
-    GxGDEH029A1(GxIO &io, int8_t rst = 9, int8_t busy = 7);
+    GxGDEH029A1(GxIO& io, int8_t rst = 9, int8_t busy = 7);
 #endif
     void drawPixel(int16_t x, int16_t y, uint16_t color);
     void init(uint32_t serial_diag_bitrate = 0); // = 0 : disabled
@@ -61,46 +61,46 @@ public:
     // each call of drawCallback() should draw the same
     void drawPaged(void (*drawCallback)(void));
     void drawPaged(void (*drawCallback)(uint32_t), uint32_t);
-    void drawPaged(void (*drawCallback)(const void *), const void *);
-    void drawPaged(void (*drawCallback)(const void *, const void *), const void *, const void *);
+    void drawPaged(void (*drawCallback)(const void*), const void*);
+    void drawPaged(void (*drawCallback)(const void*, const void*), const void*, const void*);
     // paged drawing to screen rectangle at (x,y) using partial update
     void drawPagedToWindow(void (*drawCallback)(void), uint16_t x, uint16_t y, uint16_t w, uint16_t h);
     void drawPagedToWindow(void (*drawCallback)(uint32_t), uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint32_t);
-    void drawPagedToWindow(void (*drawCallback)(const void *), uint16_t x, uint16_t y, uint16_t w, uint16_t h, const void *);
-    void drawPagedToWindow(void (*drawCallback)(const void *, const void *), uint16_t x, uint16_t y, uint16_t w, uint16_t h, const void *, const void *);
+    void drawPagedToWindow(void (*drawCallback)(const void*), uint16_t x, uint16_t y, uint16_t w, uint16_t h, const void*);
+    void drawPagedToWindow(void (*drawCallback)(const void*, const void*), uint16_t x, uint16_t y, uint16_t w, uint16_t h, const void*, const void*);
     void drawCornerTest(uint8_t em = 0x01);
-private:
+  private:
     template <typename T> static inline void
-    swap(T &a, T &b)
+    swap(T& a, T& b)
     {
-        T t = a;
-        a = b;
-        b = t;
+      T t = a;
+      a = b;
+      b = t;
     }
     void _writeToWindow(uint16_t xs, uint16_t ys, uint16_t xd, uint16_t yd, uint16_t w, uint16_t h);
     void _writeData(uint8_t data);
     void _writeCommand(uint8_t command);
-    void _writeCommandData(const uint8_t *pCommandData, uint8_t datalen);
+    void _writeCommandData(const uint8_t* pCommandData, uint8_t datalen);
     void _SetRamPointer(uint8_t addrX, uint8_t addrY, uint8_t addrY1);
     void _SetRamArea(uint8_t Xstart, uint8_t Xend, uint8_t Ystart, uint8_t Ystart1, uint8_t Yend, uint8_t Yend1);
     void _PowerOn(void);
     void _PowerOff(void);
-    void _waitWhileBusy(const char *comment = 0);
+    void _waitWhileBusy(const char* comment = 0);
     void _setRamDataEntryMode(uint8_t em);
     void _InitDisplay(uint8_t em);
     void _Init_Full(uint8_t em);
     void _Init_Part(uint8_t em);
     void _Update_Full(void);
     void _Update_Part(void);
-    void _rotate(uint16_t &x, uint16_t &y, uint16_t &w, uint16_t &h);
-protected:
+    void _rotate(uint16_t& x, uint16_t& y, uint16_t& w, uint16_t& h);
+  protected:
 #if defined(__AVR)
     uint8_t _buffer[GxGDEH029A1_PAGE_SIZE];
 #else
     uint8_t _buffer[GxGDEH029A1_BUFFER_SIZE];
 #endif
-private:
-    GxIO &IO;
+  private:
+    GxIO& IO;
     int16_t _current_page;
     bool _using_partial_mode;
     bool _diag_enabled;
@@ -114,11 +114,11 @@ private:
     static const uint8_t DummyLine[];
     static const uint8_t Gatetime[];
 #if defined(ESP8266) || defined(ESP32)
-public:
+  public:
     // the compiler of these packages has a problem with signature matching to base classes
     void drawBitmap(int16_t x, int16_t y, const uint8_t bitmap[], int16_t w, int16_t h, uint16_t color)
     {
-        Adafruit_GFX::drawBitmap(x, y, bitmap, w, h, color);
+      Adafruit_GFX::drawBitmap(x, y, bitmap, w, h, color);
     };
 #endif
 };
@@ -129,7 +129,6 @@ public:
 #define GxEPD_HEIGHT GxGDEH029A1_HEIGHT
 #define GxEPD_BitmapExamples <GxGDEH029A1/BitmapExamples.h>
 #define GxEPD_BitmapExamplesQ "GxGDEH029A1/BitmapExamples.h"
-#define GxEPD_ProductID       "2.9\""
 #endif
 
 #endif

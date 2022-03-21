@@ -168,11 +168,10 @@
 
 #define BUTTON_1                (36)
 #define BUTTON_2                (39)
-#define BUTTON_3                 (0u)//BUTTON_3
+#define BUTTON_3                (0u)
 #define BUTTONS                 {36,39,0}
 #define BUTTON_COUNT            (3)
 
-#define POWER_ENABLE			(27)
 
 #define ADC_PIN                 (35)
 
@@ -211,7 +210,7 @@
 #define _HAS_LED_
 #define _HAS_SDCARD_
 
-#elif defined(LILYGO_EPD_DISPLAY_102)
+#elif defined(LILYGO_EPD_DISPLAY)
 
 #define EPD_MOSI                (21)
 #define EPD_MISO                (-1)

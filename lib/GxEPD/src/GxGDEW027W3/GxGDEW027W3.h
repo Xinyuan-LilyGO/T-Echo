@@ -29,11 +29,11 @@
 
 class GxGDEW027W3 : public GxEPD
 {
-public:
+  public:
 #if defined(ESP8266)
-    GxGDEW027W3(GxIO &io, int8_t rst = 2, int8_t busy = 4);
+    GxGDEW027W3(GxIO& io, int8_t rst = 2, int8_t busy = 4);
 #else
-    GxGDEW027W3(GxIO &io, int8_t rst = 9, int8_t busy = 7);
+    GxGDEW027W3(GxIO& io, int8_t rst = 9, int8_t busy = 7);
 #endif
     void drawPixel(int16_t x, int16_t y, uint16_t color);
     void init(uint32_t serial_diag_bitrate = 0); // = 0 : disabled
@@ -54,21 +54,21 @@ public:
     // each call of drawCallback() should draw the same
     void drawPaged(void (*drawCallback)(void));
     void drawPaged(void (*drawCallback)(uint32_t), uint32_t);
-    void drawPaged(void (*drawCallback)(const void *), const void *);
-    void drawPaged(void (*drawCallback)(const void *, const void *), const void *, const void *);
+    void drawPaged(void (*drawCallback)(const void*), const void*);
+    void drawPaged(void (*drawCallback)(const void*, const void*), const void*, const void*);
     // paged drawing to screen rectangle at (x,y) using partial update
     void drawPagedToWindow(void (*drawCallback)(void), uint16_t x, uint16_t y, uint16_t w, uint16_t h);
     void drawPagedToWindow(void (*drawCallback)(uint32_t), uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint32_t);
-    void drawPagedToWindow(void (*drawCallback)(const void *), uint16_t x, uint16_t y, uint16_t w, uint16_t h, const void *);
-    void drawPagedToWindow(void (*drawCallback)(const void *, const void *), uint16_t x, uint16_t y, uint16_t w, uint16_t h, const void *, const void *);
+    void drawPagedToWindow(void (*drawCallback)(const void*), uint16_t x, uint16_t y, uint16_t w, uint16_t h, const void*);
+    void drawPagedToWindow(void (*drawCallback)(const void*, const void*), uint16_t x, uint16_t y, uint16_t w, uint16_t h, const void*, const void*);
     void drawCornerTest(uint8_t em = 0x01);
-private:
+  private:
     template <typename T> static inline void
-    swap(T &a, T &b)
+    swap(T& a, T& b)
     {
-        T t = a;
-        a = b;
-        b = t;
+      T t = a;
+      a = b;
+      b = t;
     }
     void _writeToWindow(uint8_t command, uint16_t xs, uint16_t ys, uint16_t xd, uint16_t yd, uint16_t w, uint16_t h);
     void _setPartialRamArea(uint8_t command, uint16_t x, uint16_t y, uint16_t w, uint16_t h);
@@ -80,15 +80,15 @@ private:
     void _sleep();
     void _Init_FullUpdate();
     void _Init_PartialUpdate();
-    void _waitWhileBusy(const char *comment = 0);
-    void _rotate(uint16_t &x, uint16_t &y, uint16_t &w, uint16_t &h);
-private:
+    void _waitWhileBusy(const char* comment = 0);
+    void _rotate(uint16_t& x, uint16_t& y, uint16_t& w, uint16_t& h);
+  private:
 #if defined(__AVR)
     uint8_t _buffer[GxGDEW027W3_PAGE_SIZE];
 #else
     uint8_t _buffer[GxGDEW027W3_BUFFER_SIZE];
 #endif
-    GxIO &IO;
+    GxIO& IO;
     int16_t _current_page;
     bool _initial, _using_partial_mode;
     bool _diag_enabled;
@@ -105,11 +105,11 @@ private:
     static const uint8_t lut_23_wb_partial[];
     static const uint8_t lut_24_bb_partial[];
 #if defined(ESP8266) || defined(ESP32)
-public:
+  public:
     // the compiler of these packages has a problem with signature matching to base classes
     void drawBitmap(int16_t x, int16_t y, const uint8_t bitmap[], int16_t w, int16_t h, uint16_t color)
     {
-        Adafruit_GFX::drawBitmap(x, y, bitmap, w, h, color);
+      Adafruit_GFX::drawBitmap(x, y, bitmap, w, h, color);
     };
 #endif
 };
@@ -118,9 +118,8 @@ public:
 #define GxEPD_Class GxGDEW027W3
 #define GxEPD_WIDTH GxGDEW027W3_WIDTH
 #define GxEPD_HEIGHT GxGDEW027W3_HEIGHT
-#define GxEPD_BitmapExamples  <GxGDEW027W3/BitmapExamples.h>
+#define GxEPD_BitmapExamples <GxGDEW027W3/BitmapExamples.h>
 #define GxEPD_BitmapExamplesQ "GxGDEW027W3/BitmapExamples.h"
-#define GxEPD_ProductID       "2.7\""
 #endif
 
 #endif

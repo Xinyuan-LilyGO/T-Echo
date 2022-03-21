@@ -2,7 +2,7 @@
  Display lilygo logo example
 
  This example shows an e-Peper display.The RGB indicator blinks in cycles.
- 
+
  This example code is in the public domain.
  */
 
@@ -158,8 +158,8 @@ void boardInit()
     digitalWrite(Power_Enable_Pin, HIGH);
 
     pinMode(ePaper_Backlight, OUTPUT);
-   //enableBacklight(true); //ON backlight 
-   enableBacklight(false); //OFF  backlight 
+    //enableBacklight(true); //ON backlight
+    enableBacklight(false); //OFF  backlight
 
     pinMode(GreenLed_Pin, OUTPUT);
     pinMode(RedLed_Pin, OUTPUT);
