@@ -4,7 +4,7 @@
 
 ## Using Arduino IDE
 1. Download [Arduino IDE](https://www.arduino.cc/en/software)
-2. Open Arduino, open preferences-> add https://www.adafruit.com/package_adafruit_index.json to the board installation manager address list
+2. Open Arduino, open preferences-> add https://adafruit.github.io/arduino-board-index/package_adafruit_index.json to the board installation manager address list
 3. Open the board installation manager, wait for the index update to complete, select 'Adafruit nRF52 by Adafruit' and click install
 4. After the installation is complete, select 'Nordic nRF52840(PCA10056)' in the board list
 5. Copy all the folders in the lib directory to `"C:\User\<YourName>\Documents\Arduino\libraries"`
