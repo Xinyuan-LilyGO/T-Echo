@@ -16,6 +16,8 @@
 2. Search for the PlatformIO plug-in in the VSCODE extension and install it.
 3. After the installation is complete and the reload is completed, there will be a small house icon in the lower left corner. Click to display the Platformio IDE home page
 4. Go to file - > Open folder - > Select the LilyGO-T-ECHO folder and click the (√) symbol in the lower left corner to compile (→) for upload.
+5. If you use USB to download the firmware (platformio.ini upload_protocol = nrfutil), you need to double-click reset button to enter DFU mode before downloading  
+
 
 
 
@@ -70,11 +72,11 @@
 ## Battery life
 Current consumption from 3.7 Volt battery:
 
-|  Mode                   |     Average current     |
-| :---------------------: | :---------------------: |
-| Active backlight OFF	  |         42 mA           |
-| Active backlight ON	  |         55 mA           |
-| 	 Sleep	          |         0.25 mA         |
+|         Mode         | Average current |
+| :------------------: | :-------------: |
+| Active backlight OFF |      42 mA      |
+| Active backlight ON  |      55 mA      |
+|        Sleep         |     0.25 mA     |
 	
 
 
