@@ -1,6 +1,6 @@
 <h1 align = "center">🌟LilyGo T-ECHO🌟</h1>
 
-## Burning boatload
+## Burning bootloader
 
 
 

@@ -35,7 +35,7 @@
 <h3 align = "left">Application :</h3>
 
 - [T-Echo SoftRF](https://github.com/lyusupov/SoftRF/wiki/Badge-Edition)
-- [T-Echo Meshtastic](https://github.com/meshtastic/Meshtastic-device/tree/v1.2.42.2759c8d)
+- [T-Echo Meshtastic](https://github.com/meshtastic/Meshtastic-device/releases)
 
 
 
@@ -66,7 +66,7 @@
 
 5. **NFC Function** is not supported in **Adafruit_nRF52_Arduino**, please use [**nRF5-SDK**](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download) for programming
 6. Flash will choose MX25R1635FZUIL0 or ZD25WQ16B according to the availability.Pay attention to the difference when using.
-7. If you need to burn boatload. You can refer to [Burning boatload](bootloader/README.MD)
+7. If you need to burn a new bootloader, see [Burning a new bootloader](bootloader/README.MD)
 
 
 ## Battery life
