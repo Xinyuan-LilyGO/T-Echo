@@ -40,7 +40,7 @@ The default example is **Arduino**, which also supports [**nRF5-SDK**](https://w
 2. 在VSCODE扩展中搜索PlatformIO插件并安装。
 3. 安装完成，重新加载后，左下角会多一个小房子图标，点击后即可显示Platformio IDE主页
 4. 点击文件->打开文件夹->选择LilyGO-T-ECHO文件夹，点击左下角(√)符号进行编译 (→)代表上传.
-5. 6. 如果使用USB下载固件（platformio.ini 配置upload_protocol = nrfutil），在下载前需要双击复位按键进入DFU模式
+5.  如果使用USB下载固件（platformio.ini 配置upload_protocol = nrfutil），在下载前需要双击复位按键进入DFU模式
 
 ## 注意事项:
 1. 需要使用**lib**目录中的文件,它包括:
