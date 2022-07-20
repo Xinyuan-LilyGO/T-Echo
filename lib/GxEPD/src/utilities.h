@@ -45,6 +45,9 @@
 #define Flash_Miso          _PINNUM(1,13)
 #define Flash_Mosi          _PINNUM(1,12)
 #define Flash_Sclk          _PINNUM(1,14)
+#define Flash_HOLD          _PINNUM(0,5)
+#define Flash_WP            _PINNUM(0,7)
+
 
 #define Touch_Pin           _PINNUM(0,11)
 #define Adc_Pin             _PINNUM(0,4)
