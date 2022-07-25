@@ -97,3 +97,25 @@ Current consumption from 3.7 Volt battery:
 |        Sleep         |     0.25 mA     |
 
 Operating time from a full charge depends on your actual battery capacity.
+
+
+## Announcements :
+
+1. After setting the LoRa output power, set the lowest current. Set sx1262 as follows :
+
+```
+    // digitalWrite(LoRa_Busy, LOW);
+    // set output power to 10 dBm (accepted range is -17 - 22 dBm)
+    if (radio.setOutputPower(22) == RADIOLIB_ERR_INVALID_OUTPUT_POWER) {
+        Serial.println(F("Selected output power is invalid for this module!"));
+        while (true);
+    }
+
+
+    // set over current protection limit to 80 mA (accepted range is 45 - 240 mA)
+    // NOTE: set value to 0 to disable overcurrent protection
+    if (radio.setCurrentLimit(80) == RADIOLIB_ERR_INVALID_CURRENT_LIMIT) {
+        Serial.println(F("Selected current limit is invalid for this module!"));
+        while (true);
+    }
+```

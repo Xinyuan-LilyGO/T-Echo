@@ -65,3 +65,24 @@ The default example is **Arduino**, which also supports [**nRF5-SDK**](https://w
 
 4. **Adafruit_nRF52_Arduino**中不支持**NFC**功能,请用[**nRF5-SDK**](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download)进行编程
 5. FLASH将根据供货情况选择MX25R1635FZUIL0或者ZD25WQ16B。使用时注意区别。
+
+## 注意事项 :
+
+1. LoRa设置输出功率后需要设置最低电流。设置sx1262如下 :
+
+```
+    // digitalWrite(LoRa_Busy, LOW);
+    // set output power to 10 dBm (accepted range is -17 - 22 dBm)
+    if (radio.setOutputPower(22) == RADIOLIB_ERR_INVALID_OUTPUT_POWER) {
+        Serial.println(F("Selected output power is invalid for this module!"));
+        while (true);
+    }
+
+
+    // set over current protection limit to 80 mA (accepted range is 45 - 240 mA)
+    // NOTE: set value to 0 to disable overcurrent protection
+    if (radio.setCurrentLimit(80) == RADIOLIB_ERR_INVALID_CURRENT_LIMIT) {
+        Serial.println(F("Selected current limit is invalid for this module!"));
+        while (true);
+    }
+```
