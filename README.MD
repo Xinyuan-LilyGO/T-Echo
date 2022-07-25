@@ -32,7 +32,7 @@
 
 |  Product   |                                                                                                Product  Link                                                                                                 |
 | :--------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| [T-Echo]() | [AliExpress](https://pt.aliexpress.com/item/1005002842456390.html)  [Amazon](https://www.amazon.com/dp/B097T4QGCT?ref=myi_title_dp) [Tindie](https://www.tindie.com/products/lilygo/lilygo-t-echo-nrf52840/) |
+| [T-Echo]() | [AliExpress](https://pt.aliexpress.com/item/1005002842456390.html)/[Amazon](https://www.amazon.com/dp/B0B659536P?ref=myi_title_dp)/[Tindie](https://www.tindie.com/products/lilygo/lilygo-t-echo-nrf52840/) |
 
 ## PinOut
 
