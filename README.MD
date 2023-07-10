@@ -38,6 +38,12 @@
 
 ![](image/T-ECHO.jpg)
 
+## Antenna actual test reference
+
+![](image/image1.jpg)
+
+![](image/image2.jpg)
+
 ## Application
 
 - [T-Echo SoftRF](https://github.com/lyusupov/SoftRF/wiki/Badge-Edition)
