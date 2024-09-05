@@ -184,13 +184,14 @@ bool setupLoRa()
     // TCXO voltage:                1.6 V (set to 0 to not use TCXO)
     // regulator:                   DC-DC (set to true to use LDO)
     // CRC:                         enabled
-    int state = radio.begin(868.0);
+    int state = radio.begin(923.0);
     if (state != ERR_NONE) {
         SerialMon.print(("failed, code "));
         SerialMon.println(state);
         return false;
     }
 
+    radio.setOutputPower(5);
 
 
     // start transmitting the first packet
