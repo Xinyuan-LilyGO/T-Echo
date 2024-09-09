@@ -104,6 +104,14 @@ Current consumption from 3.7 Volt battery:
 
 Operating time from a full charge depends on your actual battery capacity.
 
+<br />
+
+The below figure represents a more specific test, and you can use the example [Sleep_Display](./examples/Sleep_Display) to write your low-power device program.
+
+<p align="center" width="100%">
+    <img src="image/T-Echo_V1.0_PowerConsumptionTest_BLU939_1.jpg" alt="programming algorithm">
+</p>
+
 
 ## Announcements :
 
