@@ -1,7 +1,7 @@
 /*
 LORA transmit Test example
 
-This example is a transmit test for Lora. Using lora testing requires two devices to test, 
+This example is a transmit test for Lora. Using lora testing requires two devices to test,
 one of which burns the lora receive sample and the other writes the Lora transmit sample.
 You can view the output in the serial port.
 
@@ -29,12 +29,6 @@ int state = 0;
 // Change button increments this counter in Edit mode.
 int counter = 0;
 
-// LongPress on ModeButton will go into "edit" mode.
-bool isEditting = false;
-
-// In edit mode, the "field" is blinking. But when the Change button is
-// Pressed or LongPressed, the blinking temporarily stops.
-bool isBlinking = false;
 
 SPIClass        *dispPort  = nullptr;
 SPIClass        *rfPort    = nullptr;
@@ -47,18 +41,13 @@ uint8_t rgb = 0;
 // flag to indicate that a packet was sent
 volatile bool transmittedFlag = false;
 
-// disable interrupt when it's not needed
-volatile bool enableInterrupt = true;
-
 // save transmission state between loops
-int transmissionState = ERR_NONE;
+int transmissionState;
 
 void setFlag(void);
 void setupDisplay();
-void enableBacklight();
 bool setupLoRa();
 void loopSender();
-void configVDD(void);
 void boardInit();
 void LilyGo_logo(void);
 
@@ -70,39 +59,11 @@ void setup()
     boardInit();
     delay(200);
     LilyGo_logo();
-
 }
 
 void loop()
 {
-
-    if (millis() - blinkMillis > 1000) {
-
-        blinkMillis = millis();
-        switch (rgb) {
-        case 0:
-            digitalWrite(GreenLed_Pin, LOW);
-            digitalWrite(RedLed_Pin, HIGH);
-            digitalWrite(BlueLed_Pin, HIGH);
-            break;
-        case 1:
-            digitalWrite(GreenLed_Pin, HIGH);
-            digitalWrite(RedLed_Pin, LOW);
-            digitalWrite(BlueLed_Pin, HIGH);
-            break;
-        case 2:
-            digitalWrite(GreenLed_Pin, HIGH);
-            digitalWrite(RedLed_Pin, HIGH);
-            digitalWrite(BlueLed_Pin, LOW);
-            break;
-        default :
-            break;
-        }
-        rgb++;
-        rgb %= 3;
-    }
     loopSender();
-
 }
 
 void LilyGo_logo(void)
@@ -148,13 +109,8 @@ void setupDisplay()
 // is received by the module
 // IMPORTANT: this function MUST be 'void' type
 //            and MUST NOT have any arguments!
-void setFlag(void)  
+void setFlag(void)
 {
-    // check if the interrupt is enabled 
-    if (!enableInterrupt) {
-        return;
-    }
-
     // we got a packet, set the flag
     transmittedFlag = true;
 }
@@ -173,33 +129,105 @@ bool setupLoRa()
     radio = new Module(LoRa_Cs, LoRa_Dio1, LoRa_Rst, LoRa_Busy, *rfPort, spiSettings);
 
     SerialMon.print("[SX1262] Initializing ...  ");
-    // carrier frequency:           868.0 MHz
-    // bandwidth:                   125.0 kHz
-    // spreading factor:            9
-    // coding rate:                 7
-    // sync word:                   0x12 (private network)
-    // output power:                14 dBm
-    // current limit:               60 mA
-    // preamble length:             8 symbols
-    // TCXO voltage:                1.6 V (set to 0 to not use TCXO)
-    // regulator:                   DC-DC (set to true to use LDO)
-    // CRC:                         enabled
-    int state = radio.begin(923.0);
-    if (state != ERR_NONE) {
+
+    int state = radio.begin();
+    if (state != RADIOLIB_ERR_NONE) {
         SerialMon.print(("failed, code "));
         SerialMon.println(state);
         return false;
     }
 
-    radio.setOutputPower(5);
+    /*
+    *   Sets carrier frequency.
+    *   SX1262 : Allowed values are in range from 150.0 to 960.0 MHz.
+    * * * */
 
+    if (radio.setFrequency(433.0) == RADIOLIB_ERR_INVALID_FREQUENCY) {
+        Serial.println(F("Selected frequency is invalid for this module!"));
+        while (true);
+    }
+
+    /*
+    *   Sets LoRa link bandwidth.
+    *   SX1262 : Allowed values are 7.8, 10.4, 15.6, 20.8, 31.25, 41.7, 62.5, 125.0, 250.0 and 500.0 kHz.
+    * * * */
+    if (radio.setBandwidth(125.0) == RADIOLIB_ERR_INVALID_BANDWIDTH) {
+        Serial.println(F("Selected bandwidth is invalid for this module!"));
+        while (true);
+    }
+
+
+    /*
+    * Sets LoRa link spreading factor.
+    * SX1262        :  Allowed values range from 5 to 12.
+    * * * */
+    if (radio.setSpreadingFactor(12) == RADIOLIB_ERR_INVALID_SPREADING_FACTOR) {
+        Serial.println(F("Selected spreading factor is invalid for this module!"));
+        while (true);
+    }
+
+    /*
+    * Sets LoRa coding rate denominator.
+    * SX1262 : Allowed values range from 5 to 8. Only available in LoRa mode.
+    * * * */
+    if (radio.setCodingRate(6) == RADIOLIB_ERR_INVALID_CODING_RATE) {
+        Serial.println(F("Selected coding rate is invalid for this module!"));
+        while (true);
+    }
+
+    /*
+    * Sets LoRa sync word.
+    * SX1262 : Sets LoRa sync word. Only available in LoRa mode.
+    * * */
+    if (radio.setSyncWord(0xAB) != RADIOLIB_ERR_NONE) {
+        Serial.println(F("Unable to set sync word!"));
+        while (true);
+    }
+
+    /*
+    * Sets transmission output power.
+    * SX1262        :  Allowed values are in range from -9 to 22 dBm. This method is virtual to allow override from the SX1261 class.
+    * * * */
+    if (radio.setOutputPower(22) == RADIOLIB_ERR_INVALID_OUTPUT_POWER) {
+        Serial.println(F("Selected output power is invalid for this module!"));
+        while (true);
+    }
+
+    /*
+    * Sets current limit for over current protection at transmitter amplifier.
+    * SX1262 : Allowed values range from 45 to 140 mA in 5 mA steps and 120 to 240 mA in 10 mA steps.
+    * NOTE: set value to 0 to disable overcurrent protection
+    * * * */
+    if (radio.setCurrentLimit(140) == RADIOLIB_ERR_INVALID_CURRENT_LIMIT) {
+        Serial.println(F("Selected current limit is invalid for this module!"));
+        while (true);
+    }
+
+    /*
+    * Sets preamble length for LoRa or FSK modem.
+    * SX1262 : Allowed values range from 1 to 65535.
+    * * */
+    if (radio.setPreambleLength(16) == RADIOLIB_ERR_INVALID_PREAMBLE_LENGTH) {
+        Serial.println(F("Selected preamble length is invalid for this module!"));
+        while (true);
+    }
+
+    // Enables or disables CRC check of received packets.
+    if (radio.setCRC(false) == RADIOLIB_ERR_INVALID_CRC_CONFIGURATION) {
+        Serial.println(F("Selected CRC is invalid for this module!"));
+        while (true);
+    }
+
+    // set the function that will be called
+    // when packet transmission is finished
+    radio.setPacketSentAction(setFlag);
 
     // start transmitting the first packet
-    SerialMon.print(F("[SX1262] Sending first packet ... "));
+    Serial.print(F("[SX1262] Sending first packet ... "));
 
     // you can transmit C-string or Arduino string up to
     // 256 characters long
-    transmissionState = radio.startTransmit("LilyGO");
+    transmissionState = radio.startTransmit("Hello World!");
 
     // you can also transmit byte array up to 256 bytes long
     /*
@@ -207,84 +235,61 @@ bool setupLoRa()
                         0x89, 0xAB, 0xCD, 0xEF};
       state = radio.startTransmit(byteArr, 8);
     */
-    SerialMon.println(" success");
     return true;
 }
 
+// counter to keep track of transmitted packets
+int count = 0;
+
 void loopSender()
 {
-    // wait for a second before transmitting again
-    delay(1000);
+    // check if the previous transmission finished
+    if (transmittedFlag) {
+        // reset flag
+        transmittedFlag = false;
 
-    SerialMon.print(F("[SX1262] Transmitting packet ... "));
+        if (transmissionState == RADIOLIB_ERR_NONE) {
+            // packet was successfully sent
+            Serial.println(F("transmission finished!"));
 
-    // you can transmit C-string or Arduino string up to
-    // 256 characters long
-    // NOTE: transmit() is a blocking method!
-    //       See example SX126x_Transmit_Interrupt for details
-    //       on non-blocking transmission method.
-    int state = radio.transmit("LilyGO");
+            // NOTE: when using interrupt-driven transmit method,
+            //       it is not possible to automatically measure
+            //       transmission data rate using getDataRate()
 
-    // you can also transmit byte array up to 256 bytes long
-    /*
-      byte byteArr[] = {0x01, 0x23, 0x45, 0x56, 0x78, 0xAB, 0xCD, 0xEF};
-      int state = radio.transmit(byteArr, 8);
-    */
+        } else {
+            Serial.print(F("failed, code "));
+            Serial.println(transmissionState);
 
-    if (state == ERR_NONE) {
-        // the packet was successfully transmitted
-        SerialMon.println(F("success!"));
+        }
 
-        // print measured data rate
-        SerialMon.print(F("[SX1262] Datarate:\t"));
-        SerialMon.print(radio.getDataRate());
-        SerialMon.println(F(" bps"));
+        // clean up after transmission is finished
+        // this will ensure transmitter is disabled,
+        // RF switch is powered down etc.
+        radio.finishTransmit();
 
-    } else if (state == ERR_PACKET_TOO_LONG) {
-        // the supplied packet was longer than 256 bytes
-        SerialMon.println(F("too long!"));
+        // wait a second before transmitting again
+        delay(1000);
 
-    } else if (state == ERR_TX_TIMEOUT) {
-        // timeout occured while transmitting packet
-        SerialMon.println(F("timeout!"));
+        // send another one
+        Serial.print(F("[SX1262] Sending another packet ... "));
 
-    } else {
-        // some other error occurred
-        SerialMon.print(F("failed, code "));
-        SerialMon.println(state);
+        // you can transmit C-string or Arduino string up to
+        // 256 characters long
+        String str = "Hello World! #" + String(count++);
+        transmissionState = radio.startTransmit(str);
 
-    }
-
-
-}
-
-void configVDD(void)
-{
-    // Configure UICR_REGOUT0 register only if it is set to default value.
-    if ((NRF_UICR->REGOUT0 & UICR_REGOUT0_VOUT_Msk) ==
-            (UICR_REGOUT0_VOUT_DEFAULT << UICR_REGOUT0_VOUT_Pos)) {
-        NRF_NVMC->CONFIG = NVMC_CONFIG_WEN_Wen;
-        while (NRF_NVMC->READY == NVMC_READY_READY_Busy) {}
-
-        NRF_UICR->REGOUT0 = (NRF_UICR->REGOUT0 & ~((uint32_t)UICR_REGOUT0_VOUT_Msk)) |
-                            (UICR_REGOUT0_VOUT_3V3 << UICR_REGOUT0_VOUT_Pos);
-
-        NRF_NVMC->CONFIG = NVMC_CONFIG_WEN_Ren;
-        while (NRF_NVMC->READY == NVMC_READY_READY_Busy) {}
-
-        // System reset is needed to update UICR registers.
-        NVIC_SystemReset();
+        // you can also transmit byte array up to 256 bytes long
+        /*
+          byte byteArr[] = {0x01, 0x23, 0x45, 0x67,
+                            0x89, 0xAB, 0xCD, 0xEF};
+          transmissionState = radio.startTransmit(byteArr, 8);
+        */
     }
 }
+
 
 void boardInit()
 {
-    uint8_t rlst = 0;
-
-#ifdef HIGH_VOLTAGE
-    configVDD();
-#endif
-
     SerialMon.begin(MONITOR_SPEED);
     // delay(5000);
     // while (!SerialMon);

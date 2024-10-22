@@ -1,7 +1,7 @@
 /*
 LORA receive Test example
 
-This example is a receive test for Lora. Using lora testing requires two devices to test, 
+This example is a receive test for Lora. Using lora testing requires two devices to test,
 one of which burns the lora receive sample and the other writes the Lora transmit sample.
 You can view the output in the serial port.
 
@@ -28,12 +28,6 @@ int state = 0;
 // Change button increments this counter in Edit mode.
 int counter = 0;
 
-// LongPress on ModeButton will go into "edit" mode.
-bool isEditting = false;
-
-// In edit mode, the "field" is blinking. But when the Change button is
-// Pressed or LongPressed, the blinking temporarily stops.
-bool isBlinking = false;
 
 SPIClass        *dispPort  = nullptr;
 SPIClass        *rfPort    = nullptr;
@@ -44,16 +38,12 @@ uint32_t        blinkMillis = 0;
 uint8_t rgb = 0;
 // flag to indicate that a packet was received
 volatile bool receivedFlag = false;
-// disable interrupt when it's not needed
-volatile bool enableInterrupt = true;
 
 
 void setFlag(void);
 void setupDisplay();
-void enableBacklight();
-void loopReciver();
+void loopReceiver();
 bool setupLoRa();
-void configVDD(void);
 void boardInit();
 void LilyGo_logo(void);
 
@@ -69,33 +59,7 @@ void setup()
 
 void loop()
 {
-
-    if (millis() - blinkMillis > 1000) {
-
-        blinkMillis = millis();
-        switch (rgb) {
-        case 0:
-            digitalWrite(GreenLed_Pin, LOW);
-            digitalWrite(RedLed_Pin, HIGH);
-            digitalWrite(BlueLed_Pin, HIGH);
-            break;
-        case 1:
-            digitalWrite(GreenLed_Pin, HIGH);
-            digitalWrite(RedLed_Pin, LOW);
-            digitalWrite(BlueLed_Pin, HIGH);
-            break;
-        case 2:
-            digitalWrite(GreenLed_Pin, HIGH);
-            digitalWrite(RedLed_Pin, HIGH);
-            digitalWrite(BlueLed_Pin, LOW);
-            break;
-        default :
-            break;
-        }
-        rgb++;
-        rgb %= 3;
-    }
-    loopReciver();
+    loopReceiver();
 }
 
 void LilyGo_logo(void)
@@ -104,7 +68,7 @@ void LilyGo_logo(void)
     display->drawExampleBitmap(BitmapExample1, 0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, GxEPD_BLACK);
     display->update();
 }
- 
+
 void enableBacklight(bool en)
 {
     digitalWrite(ePaper_Backlight, en);
@@ -141,13 +105,8 @@ void setupDisplay()
 // is received by the module
 // IMPORTANT: this function MUST be 'void' type
 //            and MUST NOT have any arguments!
-void setFlag(void)  
+void setFlag(void)
 {
-    // check if the interrupt is enabled  
-    if (!enableInterrupt) {
-        return;
-    }
-
     // we got a packet, set the flag
     receivedFlag = true;
 }
@@ -166,24 +125,107 @@ bool setupLoRa()
     radio = new Module(LoRa_Cs, LoRa_Dio1, LoRa_Rst, LoRa_Busy, *rfPort, spiSettings);
 
     SerialMon.print("[SX1262] Initializing ...  ");
-    // carrier frequency:           868.0 MHz
-    // bandwidth:                   125.0 kHz
-    // spreading factor:            9
-    // coding rate:                 7
-    // sync word:                   0x12 (private network)
-    // output power:                14 dBm
-    // current limit:               60 mA
-    // preamble length:             8 symbols
-    // TCXO voltage:                1.6 V (set to 0 to not use TCXO)
-    // regulator:                   DC-DC (set to true to use LDO)
-    // CRC:                         enabled
-    int state = radio.begin(868.0);
-    if (state != ERR_NONE) {
+    int state = radio.begin();
+    if (state != RADIOLIB_ERR_NONE) {
         SerialMon.print(("failed, code "));
         SerialMon.println(state);
         return false;
     }
 
+    /*
+    *   Sets carrier frequency.
+    *   SX1262 : Allowed values are in range from 150.0 to 960.0 MHz.
+    * * * */
+
+    if (radio.setFrequency(433.0) == RADIOLIB_ERR_INVALID_FREQUENCY) {
+        Serial.println(F("Selected frequency is invalid for this module!"));
+        while (true);
+    }
+
+    /*
+    *   Sets LoRa link bandwidth.
+    *   SX1262 : Allowed values are 7.8, 10.4, 15.6, 20.8, 31.25, 41.7, 62.5, 125.0, 250.0 and 500.0 kHz.
+    * * * */
+    if (radio.setBandwidth(125.0) == RADIOLIB_ERR_INVALID_BANDWIDTH) {
+        Serial.println(F("Selected bandwidth is invalid for this module!"));
+        while (true);
+    }
+
+
+    /*
+    * Sets LoRa link spreading factor.
+    * SX1262        :  Allowed values range from 5 to 12.
+    * * * */
+    if (radio.setSpreadingFactor(12) == RADIOLIB_ERR_INVALID_SPREADING_FACTOR) {
+        Serial.println(F("Selected spreading factor is invalid for this module!"));
+        while (true);
+    }
+
+    /*
+    * Sets LoRa coding rate denominator.
+    * SX1262 : Allowed values range from 5 to 8. Only available in LoRa mode.
+    * * * */
+    if (radio.setCodingRate(6) == RADIOLIB_ERR_INVALID_CODING_RATE) {
+        Serial.println(F("Selected coding rate is invalid for this module!"));
+        while (true);
+    }
+
+    /*
+    * Sets LoRa sync word.
+    * SX1262 : Sets LoRa sync word. Only available in LoRa mode.
+    * * */
+    if (radio.setSyncWord(0xAB) != RADIOLIB_ERR_NONE) {
+        Serial.println(F("Unable to set sync word!"));
+        while (true);
+    }
+
+    /*
+    * Sets transmission output power.
+    * SX1262        :  Allowed values are in range from -9 to 22 dBm. This method is virtual to allow override from the SX1261 class.
+    * * * */
+    if (radio.setOutputPower(22) == RADIOLIB_ERR_INVALID_OUTPUT_POWER) {
+        Serial.println(F("Selected output power is invalid for this module!"));
+        while (true);
+    }
+
+    /*
+    * Sets current limit for over current protection at transmitter amplifier.
+    * SX1262 : Allowed values range from 45 to 140 mA in 5 mA steps and 120 to 240 mA in 10 mA steps.
+    * NOTE: set value to 0 to disable overcurrent protection
+    * * * */
+    if (radio.setCurrentLimit(140) == RADIOLIB_ERR_INVALID_CURRENT_LIMIT) {
+        Serial.println(F("Selected current limit is invalid for this module!"));
+        while (true);
+    }
+
+    /*
+    * Sets preamble length for LoRa or FSK modem.
+    * SX1262 : Allowed values range from 1 to 65535.
+    * * */
+    if (radio.setPreambleLength(16) == RADIOLIB_ERR_INVALID_PREAMBLE_LENGTH) {
+        Serial.println(F("Selected preamble length is invalid for this module!"));
+        while (true);
+    }
+
+    // Enables or disables CRC check of received packets.
+    if (radio.setCRC(false) == RADIOLIB_ERR_INVALID_CRC_CONFIGURATION) {
+        Serial.println(F("Selected CRC is invalid for this module!"));
+        while (true);
+    }
+
+    // set the function that will be called
+    // when packet transmission is finished
+    radio.setDio1Action(setFlag);
+
+    // start listening for LoRa packets
+    Serial.print(F("Radio Starting to listen ... "));
+    state = radio.startReceive();
+    if (state == RADIOLIB_ERR_NONE) {
+        Serial.println(F("success!"));
+    } else {
+        Serial.print(F("failed, code "));
+        Serial.println(state);
+    }
 
 
     SerialMon.println(" success");
@@ -192,91 +234,69 @@ bool setupLoRa()
 
 }
 
-void loopReciver()
+
+
+void loopReceiver()
 {
 
-    SerialMon.print(F("[SX1262] Waiting for incoming transmission ... "));
+    // check if the flag is set
+    if (receivedFlag) {
+        // reset flag
+        receivedFlag = false;
 
-    // you can receive data as an Arduino String
-    // NOTE: receive() is a blocking method!
-    //       See example ReceiveInterrupt for details
-    //       on non-blocking reception method.
-    String str;
-    int state = radio.receive(str);
+        // you can read received data as an Arduino String
+        String str;
+        int state = radio.readData(str);
 
-    // you can also receive data as byte array
-    /*
-      byte byteArr[8];
-      int state = radio.receive(byteArr, 8);
-    */
+        // you can also read received data as byte array
+        /*
+          byte byteArr[8];
+          int numBytes = radio.getPacketLength();
+          int state = radio.readData(byteArr, numBytes);
+        */
 
-    if (state == ERR_NONE) {
-        // packet was successfully received
-        SerialMon.println(F("success!"));
+        if (state == RADIOLIB_ERR_NONE) {
+            // packet was successfully received
+            Serial.println(F("[SX1262] Received packet!"));
 
-        // print the data of the packet
-        SerialMon.print(F("[SX1262] Data:\t\t"));
-        SerialMon.println(str);
+            // print data of the packet
+            Serial.print(F("[SX1262] Data:\t\t"));
+            Serial.println(str);
 
-        // print the RSSI (Received Signal Strength Indicator)
-        // of the last received packet
-        SerialMon.print(F("[SX1262] RSSI:\t\t"));
-        SerialMon.print(radio.getRSSI());
-        SerialMon.println(F(" dBm"));
+            // print RSSI (Received Signal Strength Indicator)
+            Serial.print(F("[SX1262] RSSI:\t\t"));
+            Serial.print(radio.getRSSI());
+            Serial.println(F(" dBm"));
 
-        // print the SNR (Signal-to-Noise Ratio)
-        // of the last received packet
-        SerialMon.print(F("[SX1262] SNR:\t\t"));
-        SerialMon.print(radio.getSNR());
-        SerialMon.println(F(" dB"));
+            // print SNR (Signal-to-Noise Ratio)
+            Serial.print(F("[SX1262] SNR:\t\t"));
+            Serial.print(radio.getSNR());
+            Serial.println(F(" dB"));
 
-    } else if (state == ERR_RX_TIMEOUT) {
-        // timeout occurred while waiting for a packet
-        SerialMon.println(F("timeout!"));
+            // print frequency error
+            Serial.print(F("[SX1262] Frequency error:\t"));
+            Serial.print(radio.getFrequencyError());
+            Serial.println(F(" Hz"));
 
-    } else if (state == ERR_CRC_MISMATCH) {
-        // packet was received, but is malformed
-        SerialMon.println(F("CRC error!"));
+        } else if (state == RADIOLIB_ERR_CRC_MISMATCH) {
+            // packet was received, but is malformed
+            Serial.println(F("CRC error!"));
 
-    } else {
-        // some other error occurred
-        SerialMon.print(F("failed, code "));
-        SerialMon.println(state);
+        } else {
+            // some other error occurred
+            Serial.print(F("failed, code "));
+            Serial.println(state);
 
-    }
-
-}
-
-void configVDD(void)
-{
-    // Configure UICR_REGOUT0 register only if it is set to default value.
-    if ((NRF_UICR->REGOUT0 & UICR_REGOUT0_VOUT_Msk) ==
-            (UICR_REGOUT0_VOUT_DEFAULT << UICR_REGOUT0_VOUT_Pos)) {
-        NRF_NVMC->CONFIG = NVMC_CONFIG_WEN_Wen;
-        while (NRF_NVMC->READY == NVMC_READY_READY_Busy) {}
-
-        NRF_UICR->REGOUT0 = (NRF_UICR->REGOUT0 & ~((uint32_t)UICR_REGOUT0_VOUT_Msk)) |
-                            (UICR_REGOUT0_VOUT_3V3 << UICR_REGOUT0_VOUT_Pos);
-
-        NRF_NVMC->CONFIG = NVMC_CONFIG_WEN_Ren;
-        while (NRF_NVMC->READY == NVMC_READY_READY_Busy) {}
-
-        // System reset is needed to update UICR registers.
-        NVIC_SystemReset();
+        }
     }
 }
+
 
 void boardInit()
 {
-    uint8_t rlst = 0;
-
-#ifdef HIGH_VOLTAGE
-    configVDD();
-#endif
-
     SerialMon.begin(MONITOR_SPEED);
     // delay(5000);
-    // while (!SerialMon);
+    while (!SerialMon);
     SerialMon.println("Start\n");
 
     uint32_t reset_reason;
