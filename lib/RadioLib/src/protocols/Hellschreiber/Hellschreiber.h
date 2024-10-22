@@ -3,18 +3,20 @@
 
 #include "../../TypeDef.h"
 
-#if !defined(RADIOLIB_EXCLUDE_HELLSCHREIBER)
+#if !RADIOLIB_EXCLUDE_HELLSCHREIBER
 
 #include "../PhysicalLayer/PhysicalLayer.h"
 #include "../AFSK/AFSK.h"
+#include "../Print/Print.h"
 
-#define HELL_FONT_WIDTH                               7
-#define HELL_FONT_HEIGHT                              7
+#define RADIOLIB_HELL_FONT_WIDTH                                7
+#define RADIOLIB_HELL_FONT_HEIGHT                               7
 
 // font definition: characters are stored in rows,
 //                  least significant byte of each character is the first row
-//                  Hellschreiber use 7x7 characters, but this simplified font uses only 5x5 - the extra bytes aren't stored
-static const uint8_t HellFont[64][HELL_FONT_WIDTH - 2] PROGMEM = {
+//                  Hellschreiber use 7x7 characters, but this simplified font uses only 5x5
+//                  the extra bytes aren't stored
+static const uint8_t HellFont[64][RADIOLIB_HELL_FONT_WIDTH - 2] RADIOLIB_NONVOLATILE = {
   { 0b0000000, 0b0000000, 0b0000000, 0b0000000, 0b0000000 },  // space
   { 0b0001000, 0b0001000, 0b0001000, 0b0000000, 0b0001000 },  // !
   { 0b0010100, 0b0010100, 0b0000000, 0b0000000, 0b0000000 },  // "
@@ -27,7 +29,7 @@ static const uint8_t HellFont[64][HELL_FONT_WIDTH - 2] PROGMEM = {
   { 0b0010000, 0b0001000, 0b0001000, 0b0001000, 0b0010000 },  // )
   { 0b0010100, 0b0001000, 0b0010100, 0b0000000, 0b0000000 },  // *
   { 0b0001000, 0b0001000, 0b0111110, 0b0001000, 0b0001000 },  // +
-  { 0b0001000, 0b0010000, 0b0000000, 0b0000000, 0b0000000 },  // ´
+  { 0b0000000, 0b0000000, 0b0000000, 0b0001000, 0b0010000 },  // ,
   { 0b0000000, 0b0000000, 0b0111110, 0b0000000, 0b0000000 },  // -
   { 0b0000000, 0b0000000, 0b0000000, 0b0000000, 0b0001000 },  // .
   { 0b0000010, 0b0000100, 0b0001000, 0b0010000, 0b0100000 },  // /
@@ -83,22 +85,19 @@ static const uint8_t HellFont[64][HELL_FONT_WIDTH - 2] PROGMEM = {
 
 /*!
   \class HellClient
-
   \brief Client for Hellschreiber transmissions.
 */
-class HellClient {
+class HellClient: public RadioLibPrint {
   public:
     /*!
       \brief Constructor for 2-FSK mode.
-
       \param phy Pointer to the wireless module providing PhysicalLayer communication.
     */
     explicit HellClient(PhysicalLayer* phy);
 
-    #if !defined(RADIOLIB_EXCLUDE_AFSK)
+    #if !RADIOLIB_EXCLUDE_AFSK
     /*!
       \brief Constructor for AFSK mode.
-
       \param audio Pointer to the AFSK instance providing audio.
     */
     explicit HellClient(AFSKClient* audio);
@@ -108,57 +107,42 @@ class HellClient {
 
     /*!
       \brief Initialization method.
-
       \param base Base RF frequency to be used in MHz (in 2-FSK mode), or the tone frequency in Hz (in AFSK mode).
-
       \param rate Baud rate to be used during transmission. Defaults to 122.5 ("Feld Hell")
     */
     int16_t begin(float base, float rate = 122.5);
 
     /*!
       \brief Method to "print" a buffer of pixels, this is exposed to allow users to send custom characters.
-
       \param buff Buffer of pixels to send, in a 7x7 pixel array.
+      \returns Always returns the number of printed glyphs (1).
     */
-    size_t printGlyph(uint8_t* buff);
+    size_t printGlyph(const uint8_t* buff);
 
-    size_t write(const char* str);
-    size_t write(uint8_t* buff, size_t len);
-    size_t write(uint8_t b);
+    /*!
+      \brief Invert text color.
+      \param inv Whether to enable color inversion (white text on black background), or not (black text on white background)
+    */
+    void setInversion(bool inv);
 
-    size_t print(__FlashStringHelper*);
-    size_t print(const String &);
-    size_t print(const char[]);
-    size_t print(char);
-    size_t print(unsigned char, int = DEC);
-    size_t print(int, int = DEC);
-    size_t print(unsigned int, int = DEC);
-    size_t print(long, int = DEC);
-    size_t print(unsigned long, int = DEC);
-    size_t print(double, int = 2);
+    /*!
+      \brief Write one byte. Implementation of interface of the RadioLibPrint/Print class.
+      \param b Byte to write.
+      \returns 1 if the byte was written, 0 otherwise.
+    */
+    size_t write(uint8_t b) override;
 
-    size_t println(void);
-    size_t println(__FlashStringHelper*);
-    size_t println(const String &);
-    size_t println(const char[]);
-    size_t println(char);
-    size_t println(unsigned char, int = DEC);
-    size_t println(int, int = DEC);
-    size_t println(unsigned int, int = DEC);
-    size_t println(long, int = DEC);
-    size_t println(unsigned long, int = DEC);
-    size_t println(double, int = 2);
-
-#ifndef RADIOLIB_GODMODE
+#if !RADIOLIB_GODMODE
   private:
 #endif
-    PhysicalLayer* _phy;
-    #if !defined(RADIOLIB_EXCLUDE_AFSK)
-    AFSKClient* _audio;
+    PhysicalLayer* phyLayer;
+    #if !RADIOLIB_EXCLUDE_AFSK
+    AFSKClient* audioClient;
     #endif
 
-    uint32_t _base = 0, _baseHz = 0;
-    uint32_t _pixelDuration = 0;
+    uint32_t baseFreq = 0, baseFreqHz = 0;
+    uint32_t pixelDuration = 0;
+    bool invert = false;
 
     size_t printNumber(unsigned long, uint8_t);
     size_t printFloat(double, uint8_t);

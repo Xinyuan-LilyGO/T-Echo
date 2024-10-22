@@ -12,6 +12,7 @@
     - SX126x
     - nRF24
     - Si443x/RFM2x
+    - LR11x0
 
    For default module settings, see the wiki page
    https://github.com/jgromes/RadioLib/wiki/Default-configuration
@@ -44,19 +45,18 @@ void setup() {
   Serial.print(F("[SX1278] Initializing ... "));
   // carrier frequency:           434.0 MHz
   // bit rate:                    1.2 kbps (1200 baud 2-FSK AX.25)
-  // frequency deviation:         0.5 kHz  (1200 baud 2-FSK AX.25)
-  int state = radio.beginFSK(434.0, 1.2, 0.5);
+  int state = radio.beginFSK(434.0, 1.2);
 
   // when using one of the non-LoRa modules for AX.25
   // (RF69, CC1101,, Si4432 etc.), use the basic begin() method
   // int state = radio.begin();
 
-  if(state == ERR_NONE) {
+  if(state == RADIOLIB_ERR_NONE) {
     Serial.println(F("success!"));
   } else {
     Serial.print(F("failed, code "));
     Serial.println(state);
-    while(true);
+    while (true) { delay(10); }
   }
 
   // initialize AX.25 client
@@ -65,12 +65,12 @@ void setup() {
   // source station SSID:         0
   // preamble length:             8 bytes
   state = ax25.begin("N7LEM");
-  if(state == ERR_NONE) {
+  if(state == RADIOLIB_ERR_NONE) {
     Serial.println(F("success!"));
   } else {
     Serial.print(F("failed, code "));
     Serial.println(state);
-    while(true);
+    while (true) { delay(10); }
   }
 }
 
@@ -80,7 +80,7 @@ void loop() {
   // destination station callsign:     "NJ7P"
   // destination station SSID:         0
   int state = ax25.transmit("Hello World!", "NJ7P");
-  if (state == ERR_NONE) {
+  if (state == RADIOLIB_ERR_NONE) {
     // the packet was successfully transmitted
     Serial.println(F("success!"));
 

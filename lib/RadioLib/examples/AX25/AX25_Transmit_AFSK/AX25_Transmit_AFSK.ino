@@ -13,6 +13,7 @@
     - CC1101
     - nRF24
     - Si443x/RFM2x
+    - SX126x/LLCC68
 
    For default module settings, see the wiki page
    https://github.com/jgromes/RadioLib/wiki/Default-configuration
@@ -36,7 +37,14 @@ SX1278 radio = new Module(10, 2, 9, 3);
 //SX1278 radio = RadioShield.ModuleA;
 
 // create AFSK client instance using the FSK module
-// pin 5 is connected to SX1278 DIO2
+// this requires connection to the module direct
+// input pin, here connected to Arduino pin 5
+// SX127x/RFM9x:  DIO2
+// RF69:          DIO2
+// SX1231:        DIO2
+// CC1101:        GDO2
+// Si443x/RFM2x:  GPIO
+// SX126x/LLCC68: DIO2
 AFSKClient audio(&radio, 5);
 
 // create AX.25 client instance using the AFSK instance
@@ -53,12 +61,12 @@ void setup() {
   // (RF69, CC1101,, Si4432 etc.), use the basic begin() method
   // int state = radio.begin();
 
-  if(state == ERR_NONE) {
+  if(state == RADIOLIB_ERR_NONE) {
     Serial.println(F("success!"));
   } else {
     Serial.print(F("failed, code "));
     Serial.println(state);
-    while(true);
+    while (true) { delay(10); }
   }
 
   // initialize AX.25 client
@@ -67,13 +75,29 @@ void setup() {
   // source station SSID:         0
   // preamble length:             8 bytes
   state = ax25.begin("N7LEM");
-  if(state == ERR_NONE) {
+  if(state == RADIOLIB_ERR_NONE) {
     Serial.println(F("success!"));
   } else {
     Serial.print(F("failed, code "));
     Serial.println(state);
-    while(true);
+    while (true) { delay(10); }
   }
+
+  // Sometimes, it may be required to adjust audio
+  // frequencies to match the expected 1200/2200 Hz tones.
+  // The following method will offset mark frequency by
+  // 100 Hz up and space frequency by 100 Hz down
+  /*
+    Serial.print(F("[AX.25] Setting correction ... "));
+    state = ax25.setCorrection(100, -100);
+    if(state == RADIOLIB_ERR_NONE) {
+      Serial.println(F("success!"));
+    } else {
+      Serial.print(F("failed, code "));
+      Serial.println(state);
+      while (true) { delay(10); }
+    }
+  */
 }
 
 void loop() {
@@ -82,7 +106,7 @@ void loop() {
   // destination station callsign:     "NJ7P"
   // destination station SSID:         0
   int state = ax25.transmit("Hello World!", "NJ7P");
-  if (state == ERR_NONE) {
+  if (state == RADIOLIB_ERR_NONE) {
     // the packet was successfully transmitted
     Serial.println(F("success!"));
 

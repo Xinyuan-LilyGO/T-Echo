@@ -33,12 +33,12 @@ void setup() {
   // initialize RF69 with default settings
   Serial.print(F("[RF69] Initializing ... "));
   int state = radio.begin();
-  if (state == ERR_NONE) {
+  if (state == RADIOLIB_ERR_NONE) {
     Serial.println(F("success!"));
   } else {
     Serial.print(F("failed, code "));
     Serial.println(state);
-    while (true);
+    while (true) { delay(10); }
   }
 
   // set node address
@@ -46,12 +46,12 @@ void setup() {
   // address filtering (node address only)
   Serial.print(F("[RF69] Setting node address ... "));
   state = radio.setNodeAddress(0x01);
-  if (state == ERR_NONE) {
+  if (state == RADIOLIB_ERR_NONE) {
     Serial.println(F("success!"));
   } else {
     Serial.print(F("failed, code "));
     Serial.println(state);
-    while (true);
+    while (true) { delay(10); }
   }
 
   // set broadcast address
@@ -59,12 +59,12 @@ void setup() {
   // address filtering (node or broadcast address)
   Serial.print(F("[RF69] Setting broadcast address ... "));
   state = radio.setBroadcastAddress(0xFF);
-  if (state == ERR_NONE) {
+  if (state == RADIOLIB_ERR_NONE) {
     Serial.println(F("success!"));
   } else {
     Serial.print(F("failed, code "));
     Serial.println(state);
-    while (true);
+    while (true) { delay(10); }
   }
 
   // address filtering can also be disabled
@@ -73,12 +73,12 @@ void setup() {
   /*
     Serial.print(F("[RF69] Disabling address filtering ... "));
     state = radio.disableAddressFiltering();
-    if(state == ERR_NONE) {
+    if(state == RADIOLIB_ERR_NONE) {
       Serial.println(F("success!"));
     } else {
       Serial.print(F("failed, code "));
       Serial.println(state);
-      while(true);
+      while (true) { delay(10); }
     }
   */
 }
@@ -106,11 +106,11 @@ void loop() {
     int state = radio.transmit(byteArr, 8, 0xFF);
   */
 
-  if (state == ERR_NONE) {
+  if (state == RADIOLIB_ERR_NONE) {
     // the packet was successfully transmitted
     Serial.println(F("success!"));
 
-  } else if (state == ERR_PACKET_TOO_LONG) {
+  } else if (state == RADIOLIB_ERR_PACKET_TOO_LONG) {
     // the supplied packet was longer than 64 bytes
     Serial.println(F("too long!"));
 

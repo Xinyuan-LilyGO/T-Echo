@@ -1,27 +1,42 @@
 #include "AFSK.h"
-#if !defined(RADIOLIB_EXCLUDE_AFSK)
+#if !RADIOLIB_EXCLUDE_AFSK
 
-AFSKClient::AFSKClient(PhysicalLayer* phy, RADIOLIB_PIN_TYPE pin): _pin(pin) {
-  _phy = phy;
+AFSKClient::AFSKClient(PhysicalLayer* phy, uint32_t pin): outPin(pin) {
+  phyLayer = phy;
+}
+
+AFSKClient::AFSKClient(AFSKClient* aud) {
+  phyLayer = aud->phyLayer;
+  outPin = aud->outPin;
+}
+
+int16_t AFSKClient::begin() {
+  return(phyLayer->startDirect());
 }
 
 int16_t AFSKClient::tone(uint16_t freq, bool autoStart) {
   if(freq == 0) {
-    return(ERR_INVALID_FREQUENCY);
+    return(RADIOLIB_ERR_INVALID_FREQUENCY);
   }
 
   if(autoStart) {
-    int16_t state = _phy->transmitDirect();
+    int16_t state = phyLayer->transmitDirect();
     RADIOLIB_ASSERT(state);
   }
 
-  Module::tone(_pin, freq);
-  return(ERR_NONE);
+  Module* mod = phyLayer->getMod();
+  mod->hal->tone(outPin, freq);
+  return(RADIOLIB_ERR_NONE);
 }
 
-int16_t AFSKClient::noTone() {
-  Module::noTone(_pin);
-  return(_phy->standby());
+int16_t AFSKClient::noTone(bool keepOn) {
+  Module* mod = phyLayer->getMod();
+  mod->hal->noTone(outPin);
+  if(keepOn) {
+    return(0);
+  }
+
+  return(phyLayer->standby());
 }
 
 #endif

@@ -13,6 +13,7 @@
     - nRF24
     - Si443x/RFM2x
     - SX128x
+    - LR11x0
 
    For default module settings, see the wiki page
    https://github.com/jgromes/RadioLib/wiki/Default-configuration
@@ -49,12 +50,12 @@ void setup() {
   // (RF69, CC1101, Si4432 etc.), use the basic begin() method
   // int state = radio.begin();
 
-  if(state == ERR_NONE) {
+  if(state == RADIOLIB_ERR_NONE) {
     Serial.println(F("success!"));
   } else {
     Serial.print(F("failed, code "));
     Serial.println(state);
-    while(true);
+    while (true) { delay(10); }
   }
 
   // initialize RTTY client
@@ -75,12 +76,12 @@ void setup() {
   // encoding:                    ASCII (7-bit)
   // stop bits:                   1
   state = rtty.begin(434.0, 183, 45);
-  if(state == ERR_NONE) {
+  if(state == RADIOLIB_ERR_NONE) {
     Serial.println(F("success!"));
   } else {
     Serial.print(F("failed, code "));
     Serial.println(state);
-    while(true);
+    while (true) { delay(10); }
   }
 
   /*
@@ -129,6 +130,9 @@ void loop() {
   // floating point number
   float f = -3.1415;
   rtty.println(f, 3);
+
+  // turn the transmitter off
+  rtty.standby();
 
   Serial.println(F("done!"));
 

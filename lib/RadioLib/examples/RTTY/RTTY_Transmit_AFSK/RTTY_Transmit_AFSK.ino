@@ -10,6 +10,7 @@
     - SX1231
     - CC1101
     - Si443x/RFM2x
+    - SX126x/LLCC68
 
    For default module settings, see the wiki page
    https://github.com/jgromes/RadioLib/wiki/Default-configuration
@@ -33,7 +34,14 @@ SX1278 radio = new Module(10, 2, 9, 3);
 //SX1278 radio = RadioShield.ModuleA;
 
 // create AFSK client instance using the FSK module
-// pin 5 is connected to SX1278 DIO2
+// this requires connection to the module direct
+// input pin, here connected to Arduino pin 5
+// SX127x/RFM9x:  DIO2
+// RF69:          DIO2
+// SX1231:        DIO2
+// CC1101:        GDO2
+// Si443x/RFM2x:  GPIO
+// SX126x/LLCC68: DIO2
 AFSKClient audio(&radio, 5);
 
 // create RTTY client instance using the AFSK instance
@@ -50,12 +58,12 @@ void setup() {
   // (RF69, CC1101, Si4432 etc.), use the basic begin() method
   // int state = radio.begin();
 
-  if(state == ERR_NONE) {
+  if(state == RADIOLIB_ERR_NONE) {
     Serial.println(F("success!"));
   } else {
     Serial.print(F("failed, code "));
     Serial.println(state);
-    while(true);
+    while (true) { delay(10); }
   }
 
   // initialize RTTY client
@@ -68,12 +76,12 @@ void setup() {
   // encoding:                    ASCII (7-bit)
   // stop bits:                   1
   state = rtty.begin(400, 170, 45);
-  if(state == ERR_NONE) {
+  if(state == RADIOLIB_ERR_NONE) {
     Serial.println(F("success!"));
   } else {
     Serial.print(F("failed, code "));
     Serial.println(state);
-    while(true);
+    while (true) { delay(10); }
   }
 
   /*
@@ -122,6 +130,9 @@ void loop() {
   // floating point number
   float f = -3.1415;
   rtty.println(f, 3);
+
+  // turn the transmitter off
+  rtty.standby();
 
   Serial.println(F("done!"));
 

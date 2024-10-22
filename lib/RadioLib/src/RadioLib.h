@@ -1,4 +1,4 @@
-#ifndef _RADIOLIB_H
+#if !defined(_RADIOLIB_H)
 #define _RADIOLIB_H
 
 /*!
@@ -8,24 +8,20 @@
 
   \par Currently Supported Wireless Modules and Protocols
   - CC1101 FSK module
-  - HC05 Bluetooth module
-  - JDY08 BLE module
   - RF69 FSK module
   - Si443x FSK module
   - SX126x LoRa/FSK module
   - SX127x LoRa/FSK module
   - SX128x LoRa/GFSK/BLE/FLRC module
   - SX1231 FSK module
-  - XBee module (S2B)
   - PhysicalLayer protocols
     - RTTY (RTTYClient)
     - Morse Code (MorseClient)
     - AX.25 (AX25Client)
     - SSTV (SSTVClient)
     - Hellschreiber (HellClient)
-  - TransportLayer protocols
-    - HTTP (HTTPClient)
-    - MQTT (MQTTClient)
+    - 4-FSK (FSK4Client)
+    - APRS (APRSClient)
 
   \par Quick Links
   Documentation for most common methods can be found in its reference page (see the list above).\n
@@ -33,7 +29,6 @@
   \ref status_codes have their own page.\n
   Some modules implement methods of one or more compatibility layers, loosely based on the ISO/OSI model:
   - PhysicalLayer - FSK and LoRa radio modules
-  - TransportLayer - Modules with Internet connectivity
 
   \see https://github.com/jgromes/RadioLib
 
@@ -43,41 +38,52 @@
 #include "TypeDef.h"
 #include "Module.h"
 
+#include "Hal.h"
+#if defined(RADIOLIB_BUILD_ARDUINO)
+#include "ArduinoHal.h"
+#endif
+
+
 // warnings are printed in this file since BuildOpt.h is compiled in multiple places
 
 // check God mode
-#ifdef RADIOLIB_GODMODE
+#if RADIOLIB_GODMODE
   #warning "God mode active, I hope it was intentional. Buckle up, lads."
 #endif
 
 // print debug info
-#ifdef RADIOLIB_DEBUG
-  #pragma message "RADIOLIB_PLATFORM: " RADIOLIB_PLATFORM
+#if RADIOLIB_DEBUG
+  #pragma message(RADIOLIB_INFO)
 #endif
 
 // check unknown/unsupported platform
-#ifdef RADIOLIB_UNKNOWN_PLATFORM
+#if defined(RADIOLIB_UNKNOWN_PLATFORM)
   #warning "RadioLib might not be compatible with this Arduino board - check supported platforms at https://github.com/jgromes/RadioLib!"
 #endif
 
+// print warning for low-end platforms
+#if defined(RADIOLIB_LOWEND_PLATFORM)
+  #warning "Low-end platform detected, stability issues are likely!"
+#endif
+
 #include "modules/CC1101/CC1101.h"
-#include "modules/ESP8266/ESP8266.h"
-#include "modules/HC05/HC05.h"
-#include "modules/JDY08/JDY08.h"
+#include "modules/LLCC68/LLCC68.h"
+#include "modules/LR11x0/LR1110.h"
+#include "modules/LR11x0/LR1120.h"
+#include "modules/LR11x0/LR1121.h"
 #include "modules/nRF24/nRF24.h"
 #include "modules/RF69/RF69.h"
 #include "modules/RFM2x/RFM22.h"
 #include "modules/RFM2x/RFM23.h"
-#include "modules/RFM9x/RFM95.h"
-#include "modules/RFM9x/RFM96.h"
-#include "modules/RFM9x/RFM97.h"
 #include "modules/Si443x/Si4430.h"
 #include "modules/Si443x/Si4431.h"
 #include "modules/Si443x/Si4432.h"
-#include "modules/SX1231/SX1231.h"
+#include "modules/SX123x/SX1231.h"
+#include "modules/SX123x/SX1233.h"
 #include "modules/SX126x/SX1261.h"
 #include "modules/SX126x/SX1262.h"
 #include "modules/SX126x/SX1268.h"
+#include "modules/SX126x/STM32WLx.h"
 #include "modules/SX127x/SX1272.h"
 #include "modules/SX127x/SX1273.h"
 #include "modules/SX127x/SX1276.h"
@@ -87,7 +93,6 @@
 #include "modules/SX128x/SX1280.h"
 #include "modules/SX128x/SX1281.h"
 #include "modules/SX128x/SX1282.h"
-#include "modules/XBee/XBee.h"
 
 // physical layer protocols
 #include "protocols/PhysicalLayer/PhysicalLayer.h"
@@ -95,26 +100,32 @@
 #include "protocols/AX25/AX25.h"
 #include "protocols/Hellschreiber/Hellschreiber.h"
 #include "protocols/Morse/Morse.h"
+#include "protocols/Pager/Pager.h"
 #include "protocols/RTTY/RTTY.h"
 #include "protocols/SSTV/SSTV.h"
+#include "protocols/FSK4/FSK4.h"
+#include "protocols/APRS/APRS.h"
+#include "protocols/ExternalRadio/ExternalRadio.h"
+#include "protocols/Print/Print.h"
+#include "protocols/BellModem/BellModem.h"
+#include "protocols/LoRaWAN/LoRaWAN.h"
 
-// transport layer protocols
-#include "protocols/TransportLayer/TransportLayer.h"
-#include "protocols/HTTP/HTTP.h"
-#include "protocols/MQTT/MQTT.h"
+// utilities
+#include "utils/CRC.h"
+#include "utils/Cryptography.h"
 
 // only create Radio class when using RadioShield
-#ifdef RADIOLIB_RADIOSHIELD
+#if RADIOLIB_RADIOSHIELD
 
 // RadioShield pin definitions
-#define RADIOSHIELD_CS_A   10
-#define RADIOSHIELD_RX_A   9
-#define RADIOSHIELD_TX_A   8
-#define RADIOSHIELD_CS_B   5
-#define RADIOSHIELD_RX_B   7
-#define RADIOSHIELD_TX_B   6
-#define RADIOSHIELD_INT_0  2
-#define RADIOSHIELD_INT_1  3
+#define RADIOSHIELD_CS_A    10
+#define RADIOSHIELD_IRQ_A   2
+#define RADIOSHIELD_RST_A   9
+#define RADIOSHIELD_GPIO_A  8
+#define RADIOSHIELD_CS_B    5
+#define RADIOSHIELD_IRQ_B   3
+#define RADIOSHIELD_RST_B   7
+#define RADIOSHIELD_GPIO_B  6
 
 /*!
   \class Radio
@@ -132,11 +143,11 @@ class Radio {
       \brief Default constructor. Only used to set ModuleA and ModuleB configuration.
     */
     Radio() {
-      ModuleA = new Module(RADIOSHIELD_CS_A, RADIOSHIELD_INT_0, RADIOSHIELD_INT_1, RADIOSHIELD_RX_A, RADIOSHIELD_TX_A, SPI, SPISettings(2000000, MSBFIRST, SPI_MODE0), nullptr);
-      ModuleB = new Module(RADIOSHIELD_CS_B, RADIOSHIELD_INT_0, RADIOSHIELD_INT_1, RADIOSHIELD_RX_B, RADIOSHIELD_TX_B, SPI, SPISettings(2000000, MSBFIRST, SPI_MODE0), nullptr);
+      ModuleA = new Module(RADIOSHIELD_CS_A, RADIOSHIELD_IRQ_A, RADIOSHIELD_RST_A, RADIOSHIELD_GPIO_A);
+      ModuleB = new Module(RADIOSHIELD_CS_B, RADIOSHIELD_IRQ_B, RADIOSHIELD_RST_B, RADIOSHIELD_GPIO_B);
     }
 
-#ifndef RADIOLIB_GODMODE
+#if RADIOLIB_GODMODE
   private:
 #endif
 

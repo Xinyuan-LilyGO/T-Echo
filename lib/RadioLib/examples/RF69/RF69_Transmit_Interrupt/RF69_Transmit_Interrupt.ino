@@ -29,7 +29,7 @@ RF69 radio = new Module(10, 2, 3);
 //RF69 radio = RadioShield.ModuleA;
 
 // save transmission state between loops
-int transmissionState = ERR_NONE;
+int transmissionState = RADIOLIB_ERR_NONE;
 
 void setup() {
   Serial.begin(9600);
@@ -37,17 +37,17 @@ void setup() {
   // initialize RF69 with default settings
   Serial.print(F("[RF69] Initializing ... "));
   int state = radio.begin();
-  if (state == ERR_NONE) {
+  if (state == RADIOLIB_ERR_NONE) {
     Serial.println(F("success!"));
   } else {
     Serial.print(F("failed, code "));
     Serial.println(state);
-    while (true);
+    while (true) { delay(10); }
   }
 
   // set the function that will be called
   // when packet transmission is finished
-  radio.setDio0Action(setFlag);
+  radio.setPacketSentAction(setFlag);
 
   // NOTE: some RF69 modules use high power output,
   //       those are usually marked RF69H(C/CW).
@@ -57,12 +57,12 @@ void setup() {
   /*
     Serial.print(F("[RF69] Setting high power module ... "));
     state = radio.setOutputPower(20, true);
-    if (state == ERR_NONE) {
+    if (state == RADIOLIB_ERR_NONE) {
       Serial.println(F("success!"));
     } else {
       Serial.print(F("failed, code "));
       Serial.println(state);
-      while (true);
+      while (true) { delay(10); }
     }
   */
 
@@ -84,34 +84,28 @@ void setup() {
 // flag to indicate that a packet was sent
 volatile bool transmittedFlag = false;
 
-// disable interrupt when it's not needed
-volatile bool enableInterrupt = true;
-
 // this function is called when a complete packet
 // is transmitted by the module
 // IMPORTANT: this function MUST be 'void' type
 //            and MUST NOT have any arguments!
+#if defined(ESP8266) || defined(ESP32)
+  ICACHE_RAM_ATTR
+#endif
 void setFlag(void) {
-  // check if the interrupt is enabled
-  if(!enableInterrupt) {
-    return;
-  }
-
   // we sent a packet, set the flag
   transmittedFlag = true;
 }
 
+// counter to keep track of transmitted packets
+int count = 0;
+
 void loop() {
   // check if the previous transmission finished
   if(transmittedFlag) {
-    // disable the interrupt service routine while
-    // processing the data
-    enableInterrupt = false;
-
     // reset flag
     transmittedFlag = false;
 
-    if (transmissionState == ERR_NONE) {
+    if (transmissionState == RADIOLIB_ERR_NONE) {
       // packet was successfully sent
       Serial.println(F("transmission finished!"));
 
@@ -125,6 +119,11 @@ void loop() {
 
     }
 
+    // clean up after transmission is finished
+    // this will ensure transmitter is disabled,
+    // RF switch is powered down etc.
+    radio.finishTransmit();
+
     // wait a second before transmitting again
     delay(1000);
 
@@ -132,18 +131,15 @@ void loop() {
     Serial.print(F("[RF69] Sending another packet ... "));
 
     // you can transmit C-string or Arduino string up to
-    // 256 characters long
-    transmissionState = radio.startTransmit("Hello World!");
+    // 64 characters long
+    String str = "Hello World! #" + String(count++);
+    transmissionState = radio.startTransmit(str);
 
     // you can also transmit byte array up to 64 bytes long
     /*
       byte byteArr[] = {0x01, 0x23, 0x45, 0x67,
                         0x89, 0xAB, 0xCD, 0xEF};
-      int state = radio.startTransmit(byteArr, 8);
+      transmissionState = radio.startTransmit(byteArr, 8);
     */
-
-    // we're ready to send more packets,
-    // enable interrupt service routine
-    enableInterrupt = true;
   }
 }
