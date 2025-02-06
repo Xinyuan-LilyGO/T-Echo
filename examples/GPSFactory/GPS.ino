@@ -68,6 +68,9 @@ bool find_gps = false;
 void setup()
 {
     Serial.begin(115200);
+
+    while (!Serial);
+
     SerialMon.begin(MONITOR_SPEED);
 
     SerialMon.println("[GPS] Initializing ... ");
@@ -114,10 +117,10 @@ void loop()
         delay(1000);
     }
     while (SerialGPS.available()) {
-        SerialGPS.write(Serial.read());
+        Serial.write(SerialGPS.read());
     }
     while (Serial.available()) {
-        Serial.write(SerialGPS.read());
+        SerialGPS.write(Serial.read());
     }
 }
 
