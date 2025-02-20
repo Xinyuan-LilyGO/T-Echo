@@ -25,7 +25,8 @@
 #include <AceButton.h>
 #include <nrfx_temp.h>
 #include <ICM20948_WE.h>
-
+#include <MPU9250.h>
+#include "SensorWireHelper.h"
 using namespace ace_button;
 
 
@@ -36,14 +37,19 @@ void drawGPS();
 void deviceProbe(TwoWire &t);
 void drawDevProbe();
 void drawDevicesInfo();
+bool probeIMU20948();
+bool probeIMU9250();
+bool beginPDM();
+void drawPDM();
+void loopPDM();
 
 AceButton button(UserButton_Pin);
 uint32_t        blinkMillis = 0;
 uint8_t         funcSelectIndex = 0;
 uint8_t         prevFuncSelectIndex = 0xFF;
 bool            sleepIn = false;
-uint8_t         devices_probe_mask = 0;
-static nrfx_temp_config_t config = NRFX_TEMP_DEFAULT_CONFIG;
+uint16_t         devices_probe_mask = 0;
+
 static bool gotoSleep = false;
 extern String BLE_NAME;
 typedef void (*funcLoopCallBackTypedef)(void);
@@ -59,7 +65,8 @@ struct _callback {
     {drawGPS, loopGPS},
     {drawSensor, loopSensor,},
     {drawSender, loopSender,},
-    {drawReceiver, loopReceiver,},
+    {drawReceiver, loopReceiver},
+    {drawPDM, loopPDM},
 };
 
 funcFirstCallBackTypedef prevFirstFunc = NULL;
@@ -77,6 +84,7 @@ xSemaphoreHandle semHandle = NULL;
  */
 #define ICM20948_ADDR 0x68
 ICM20948_WE IMU = ICM20948_WE(ICM20948_ADDR);
+MPU9250 IMU_9250;
 
 typedef enum {
     nRF52_RESETPIN = 1,         /*Reset from pin-reset detected*/
@@ -309,12 +317,22 @@ void drawDevProbe()
         display.println(devices_probe_mask & bit(3) ? "PASS" : "FAIL");
         display.print("[PCF8563]");
         display.println(devices_probe_mask & bit(4) ? "PASS" : "FAIL");
-        display.print("[SENSOR ]");
+        display.print("[BME280 ]");
         display.println(devices_probe_mask & bit(5) ? "PASS" : "FAIL");
         display.print("[SPIFFS ]");
         display.println(devices_probe_mask & bit(6) ? "PASS" : "FAIL");
-        display.print("[IMU    ]");
-        display.println(devices_probe_mask & bit(7) ? "PASS" : "FAIL");
+
+        if (devices_probe_mask & bit(7)) {
+            display.print("[IMU20948]");
+            display.println("PASS");
+        } else if (devices_probe_mask & bit(8)) {
+            display.print("[MPU9250]");
+            display.println("PASS");
+        } else {
+            display.print("[IMU]");
+            display.println("FAIL");
+        }
+
     } while (display.nextPage());
 
     uint8_t val = WHITE_LED;
@@ -340,70 +358,27 @@ void drawSleep()
 
 }
 
-bool setupIMU()
+
+
+bool probeIMU9250()
 {
-    if (!IMU.init()) {
-        Serial.println("IMU init failed!"); return false;
+    if (!IMU_9250.setup(0x68)) {
+        Serial.println("MPU9250 init failed!");
+        return false;
     }
-    Serial.println("IMU init succeeded");
-
-    IMU.autoOffsets();
-    Serial.println("Done!");
-
-    /*  The gyroscope data is not zero, even if you don't move the ICM20948.
-     *  To start at zero, you can apply offset values. These are the gyroscope raw values you obtain
-     *  using the +/- 250 degrees/s range.
-     *  Use either autoOffsets or setGyrOffsets, not both.
-     */
-    //IMU.setGyrOffsets(-115.0, 130.0, 105.0);
-
-    /* enables or disables the gyroscope sensor, default: enabled */
-    // IMU.enableGyr(false);
-
-    /*  ICM20948_GYRO_RANGE_250       250 degrees per second (default)
-     *  ICM20948_GYRO_RANGE_500       500 degrees per second
-     *  ICM20948_GYRO_RANGE_1000     1000 degrees per second
-     *  ICM20948_GYRO_RANGE_2000     2000 degrees per second
-     */
-    IMU.setGyrRange(ICM20948_GYRO_RANGE_250);
-
-    /*  Choose a level for the Digital Low Pass Filter or switch it off.
-     *  ICM20948_DLPF_0, ICM20948_DLPF_2, ...... ICM20948_DLPF_7, ICM20948_DLPF_OFF
-     *
-     *  DLPF       3dB Bandwidth [Hz]      Output Rate [Hz]
-     *    0              196.6               1125/(1+GSRD)
-     *    1              151.8               1125/(1+GSRD)
-     *    2              119.5               1125/(1+GSRD)
-     *    3               51.2               1125/(1+GSRD)
-     *    4               23.9               1125/(1+GSRD)
-     *    5               11.6               1125/(1+GSRD)
-     *    6                5.7               1125/(1+GSRD)
-     *    7              361.4               1125/(1+GSRD)
-     *    OFF          12106.0               9000
-     *
-     *    GSRD = Gyroscope Sample Rate Divider (0...255)
-     *    You achieve lowest noise using level 6
-     */
-    IMU.setGyrDLPF(ICM20948_DLPF_6);
-
-    /*  Gyroscope sample rate divider divides the output rate of the gyroscope.
-     *  Sample rate = Basic sample rate / (1 + divider)
-     *  It can only be applied if the corresponding DLPF is not OFF!
-     *  Divider is a number 0...255
-     *  If sample rates are set for the accelerometer and the gyroscope, the gyroscope
-     *  sample rate has priority.
-     */
-    //IMU.setGyrSampleRateDivider(10);
-
-    if (!IMU.initMagnetometer()) {
-        Serial.println("Magnetometer does not respond");
-    } else {
-        Serial.println("Magnetometer is connected");
-    }
-    IMU.setMagOpMode(AK09916_CONT_MODE_20HZ);
-    
     return true;
 }
+
+bool probeIMU20948()
+{
+    if (!IMU.init()) {
+        Serial.println("IMU20948 init failed!");
+        return false;
+    }
+    return true;
+}
+
+
 
 void setup()
 {
@@ -415,10 +390,11 @@ void setup()
     xSemaphoreGive(semHandle);
 
     SerialMon.begin(MONITOR_SPEED);
-    delay(500);
+    delay(1500);
     // while (!SerialMon);
     SerialMon.println("Start\n");
 
+    SensorWireHelper::dumpDevices(Wire);
     uint32_t reset_reason;
     sd_power_reset_reason_get(&reset_reason);
     SerialMon.print("sd_power_reset_reason_get:0x");
@@ -464,7 +440,11 @@ void setup()
 
     devices_probe_mask |= setupInternalFileSystem() ? bit(6) : 0;
 
-    devices_probe_mask |= setupIMU() ? bit(7) : 0 ;
+    devices_probe_mask |= probeIMU20948() ? bit(7) : 0 ;
+
+    devices_probe_mask |= probeIMU9250() ? bit(8) : 0 ;
+
+    beginPDM();
 
     pinMode(Touch_Pin, INPUT_PULLDOWN);
     attachInterrupt(Touch_Pin, []() {
