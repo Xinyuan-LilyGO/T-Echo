@@ -170,7 +170,7 @@ void drawSensor()
 ************************************/
 bool setupSensor()
 {
-    SerialMon.print("[SENSOR ] Initializing ...  ");
+    SerialMon.print("[BME280 ] Initializing ...  ");
     bme = new Adafruit_BME280();
     if (bme->begin()) {
         SerialMon.println("success");
@@ -330,7 +330,7 @@ bool setupRTC()
 
     // deviceProbe(Wire);
 
-    if (!rtc.init(Wire)) {
+    if (!rtc.begin(Wire)) {
         Serial.println("RTC init failed !");
         isRtcOnline = false;
         return false;
@@ -341,9 +341,9 @@ bool setupRTC()
     // If they do not match, it will be updated to the compilation date
     RTC_DateTime compileDatetime =  RTC_DateTime(__DATE__, __TIME__);
     RTC_DateTime hwDatetime = rtc.getDateTime();
-    if (compileDatetime.year != hwDatetime.year ||
-            compileDatetime.month != hwDatetime.month ||
-            compileDatetime.day != hwDatetime.day
+    if (compileDatetime.getYear() != hwDatetime.getYear() ||
+            compileDatetime.getMonth() != hwDatetime.getMonth() ||
+            compileDatetime.getDay() != hwDatetime.getDay()
        ) {
         Serial.println("No match yy:mm:dd . set datetime to compilation date time");
         rtc.setDateTime(compileDatetime);

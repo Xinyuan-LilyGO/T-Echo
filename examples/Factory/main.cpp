@@ -26,7 +26,12 @@
 #include <nrfx_temp.h>
 #include <ICM20948_WE.h>
 #include <MPU9250.h>
-#include "SensorWireHelper.h"
+#include <SensorBHI260AP.hpp>
+#include <SensorWireHelper.h>
+
+#define BOSCH_APP30_SHUTTLE_BHI260_FW
+#include <BoschFirmware.h>
+
 using namespace ace_button;
 
 
@@ -85,6 +90,7 @@ xSemaphoreHandle semHandle = NULL;
 #define ICM20948_ADDR 0x68
 ICM20948_WE IMU = ICM20948_WE(ICM20948_ADDR);
 MPU9250 IMU_9250;
+SensorBHI260AP bhy;
 
 typedef enum {
     nRF52_RESETPIN = 1,         /*Reset from pin-reset detected*/
@@ -328,6 +334,9 @@ void drawDevProbe()
         } else if (devices_probe_mask & bit(8)) {
             display.print("[MPU9250]");
             display.println("PASS");
+        } else if (devices_probe_mask & bit(9)) {
+            display.print("[BHI260 ]");
+            display.println("PASS");
         } else {
             display.print("[IMU]");
             display.println("FAIL");
@@ -363,7 +372,7 @@ void drawSleep()
 bool probeIMU9250()
 {
     if (!IMU_9250.setup(0x68)) {
-        Serial.println("MPU9250 init failed!");
+        SerialMon.println("MPU9250 init failed!");
         return false;
     }
     return true;
@@ -372,13 +381,23 @@ bool probeIMU9250()
 bool probeIMU20948()
 {
     if (!IMU.init()) {
-        Serial.println("IMU20948 init failed!");
+        SerialMon.println("IMU20948 init failed!");
         return false;
     }
     return true;
 }
 
-
+bool probeBHY260AP()
+{
+    bhy.setFirmware(bosch_firmware_image, bosch_firmware_size, bosch_firmware_type);
+    if (!bhy.begin(Wire, BHI260AP_SLAVE_ADDRESS_L)) {
+        SerialMon.print("BHI260 failed to initialize sensor - error code:");
+        SerialMon.println(bhy.getError());
+        return false;
+    }
+    SerialMon.println("BHI260AP init successfully!");
+    return true;
+}
 
 void setup()
 {
@@ -440,9 +459,16 @@ void setup()
 
     devices_probe_mask |= setupInternalFileSystem() ? bit(6) : 0;
 
-    devices_probe_mask |= probeIMU20948() ? bit(7) : 0 ;
+    Wire.beginTransmission(0x68);
+    if (Wire.endTransmission() == 0) {
+        devices_probe_mask |= probeIMU20948() ? bit(7) : 0 ;
+        devices_probe_mask |= probeIMU9250() ? bit(8) : 0 ;
+    }
 
-    devices_probe_mask |= probeIMU9250() ? bit(8) : 0 ;
+    Wire.beginTransmission(0x28);
+    if (Wire.endTransmission() == 0) {
+        devices_probe_mask |= probeBHY260AP() ? bit(9) : 0;
+    }
 
     beginPDM();
 
