@@ -28,9 +28,13 @@
 // GDO2 pin:  3
 CC1101 radio = new Module(10, 2, RADIOLIB_NC, 3);
 
-// or using RadioShield
-// https://github.com/jgromes/RadioShield
-//CC1101 radio = RadioShield.ModuleA;
+// or detect the pinout automatically using RadioBoards
+// https://github.com/radiolib-org/RadioBoards
+/*
+#define RADIO_BOARD_AUTO
+#include <RadioBoards.h>
+Radio radio = new RadioModule();
+*/
 
 void setup() {
   Serial.begin(9600);
@@ -53,11 +57,11 @@ int count = 0;
 void loop() {
   Serial.print(F("[CC1101] Transmitting packet ... "));
 
-  // you can transmit C-string or Arduino string up to 63 characters long
+  // you can transmit C-string or Arduino string up to 64 characters long
   String str = "Hello World! #" + String(count++);
   int state = radio.transmit(str);
 
-  // you can also transmit byte array up to 63 bytes long
+  // you can also transmit byte array up to 64 bytes long
   /*
     byte byteArr[] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
     int state = radio.transmit(byteArr, 8);

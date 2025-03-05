@@ -1,15 +1,15 @@
 /*
-   RadioLib RF69 Receive with Interrupts Example
+  RadioLib RF69 Receive with Interrupts Example
 
-   This example listens for FSK transmissions and tries to
-   receive them. Once a packet is received, an interrupt is
-   triggered.
+  This example listens for FSK transmissions and tries to
+  receive them. Once a packet is received, an interrupt is
+  triggered.
 
-   For default module settings, see the wiki page
-   https://github.com/jgromes/RadioLib/wiki/Default-configuration#rf69sx1231
+  For default module settings, see the wiki page
+  https://github.com/jgromes/RadioLib/wiki/Default-configuration#rf69sx1231
 
-   For full API reference, see the GitHub Pages
-   https://jgromes.github.io/RadioLib/
+  For full API reference, see the GitHub Pages
+  https://jgromes.github.io/RadioLib/
 */
 
 // include the library
@@ -21,9 +21,28 @@
 // RESET pin: 3
 RF69 radio = new Module(10, 2, 3);
 
-// or using RadioShield
-// https://github.com/jgromes/RadioShield
-//RF69 radio = RadioShield.ModuleA;
+// or detect the pinout automatically using RadioBoards
+// https://github.com/radiolib-org/RadioBoards
+/*
+#define RADIO_BOARD_AUTO
+#include <RadioBoards.h>
+Radio radio = new RadioModule();
+*/
+
+// flag to indicate that a packet was received
+volatile bool receivedFlag = false;
+
+// this function is called when a complete packet
+// is received by the module
+// IMPORTANT: this function MUST be 'void' type
+//            and MUST NOT have any arguments!
+#if defined(ESP8266) || defined(ESP32)
+  ICACHE_RAM_ATTR
+#endif
+void setFlag(void) {
+  // we got a packet, set the flag
+  receivedFlag = true;
+}
 
 void setup() {
   Serial.begin(9600);
@@ -62,21 +81,6 @@ void setup() {
   // radio.transmit();
   // radio.receive();
   // radio.readData();
-}
-
-// flag to indicate that a packet was received
-volatile bool receivedFlag = false;
-
-// this function is called when a complete packet
-// is received by the module
-// IMPORTANT: this function MUST be 'void' type
-//            and MUST NOT have any arguments!
-#if defined(ESP8266) || defined(ESP32)
-  ICACHE_RAM_ATTR
-#endif
-void setFlag(void) {
-  // we got a packet, set the flag
-  receivedFlag = true;
 }
 
 void loop() {

@@ -1,20 +1,20 @@
 /*
-   RadioLib nRF24 Receive Example
+  RadioLib nRF24 Receive Example
 
-   This example listens for FSK transmissions using nRF24 2.4 GHz radio module.
-   Once a packet is received, an interrupt is triggered.
-   To successfully receive data, the following settings have to be the same
-   on both transmitter and receiver:
-    - carrier frequency
-    - data rate
-    - transmit pipe on transmitter must match receive pipe
-      on receiver
+  This example listens for FSK transmissions using nRF24 2.4 GHz radio module.
+  Once a packet is received, an interrupt is triggered.
+  To successfully receive data, the following settings have to be the same
+  on both transmitter and receiver:
+  - carrier frequency
+  - data rate
+  - transmit pipe on transmitter must match receive pipe
+    on receiver
 
-   For default module settings, see the wiki page
-   https://github.com/jgromes/RadioLib/wiki/Default-configuration#nrf24
+  For default module settings, see the wiki page
+  https://github.com/jgromes/RadioLib/wiki/Default-configuration#nrf24
 
-   For full API reference, see the GitHub Pages
-   https://jgromes.github.io/RadioLib/
+  For full API reference, see the GitHub Pages
+  https://jgromes.github.io/RadioLib/
 */
 
 // include the library
@@ -26,9 +26,28 @@
 // CE pin:    3
 nRF24 radio = new Module(10, 2, 3);
 
-// or using RadioShield
-// https://github.com/jgromes/RadioShield
-//nRF24 radio = RadioShield.ModuleA;
+// or detect the pinout automatically using RadioBoards
+// https://github.com/radiolib-org/RadioBoards
+/*
+#define RADIO_BOARD_AUTO
+#include <RadioBoards.h>
+Radio radio = new RadioModule();
+*/
+
+// flag to indicate that a packet was received
+volatile bool receivedFlag = false;
+
+// this function is called when a complete packet
+// is received by the module
+// IMPORTANT: this function MUST be 'void' type
+//            and MUST NOT have any arguments!
+#if defined(ESP8266) || defined(ESP32)
+  ICACHE_RAM_ATTR
+#endif
+void setFlag(void) {
+  // we got a packet, set the flag
+  receivedFlag = true;
+}
 
 void setup() {
   Serial.begin(9600);
@@ -82,21 +101,6 @@ void setup() {
   // radio.transmit();
   // radio.receive();
   // radio.readData();
-}
-
-// flag to indicate that a packet was received
-volatile bool receivedFlag = false;
-
-// this function is called when a complete packet
-// is received by the module
-// IMPORTANT: this function MUST be 'void' type
-//            and MUST NOT have any arguments!
-#if defined(ESP8266) || defined(ESP32)
-  ICACHE_RAM_ATTR
-#endif
-void setFlag(void) {
-  // we got a packet, set the flag
-  receivedFlag = true;
 }
 
 void loop() {

@@ -22,7 +22,7 @@ const LoRaWANBand_t EU868 = {
   .bandType = RADIOLIB_LORAWAN_BAND_DYNAMIC,
   .freqMin = 8630000,
   .freqMax = 8700000,
-  .payloadLenMax = {  59,  59,  59, 123, 250, 250, 250, 250,  58, 123,  58, 123,   0,   0,   0 },
+  .payloadLenMax = {  51,  51,  51, 115, 242, 242, 242, 242,  50, 115,  50, 115,   0,   0,   0 },
   .powerMax = 16,
   .powerNumSteps = 7,
   .dutyCycle = 36000,
@@ -30,14 +30,9 @@ const LoRaWANBand_t EU868 = {
   .dwellTimeDn = 0,
   .txParamSupported = false,
   .txFreqs = {
-    { .enabled = true, .idx = 0, .freq = 8681000, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    { .enabled = true, .idx = 1, .freq = 8683000, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    { .enabled = true, .idx = 2, .freq = 8685000, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-  },
-  .txJoinReq = {
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE
+    { .enabled = true, .idx = 0, .freq = 8681000, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
+    { .enabled = true, .idx = 1, .freq = 8683000, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
+    { .enabled = true, .idx = 2, .freq = 8685000, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
   },
   .numTxSpans = 0,
   .txSpans = {
@@ -95,7 +90,7 @@ const LoRaWANBand_t US915 = {
   .bandType = RADIOLIB_LORAWAN_BAND_FIXED,
   .freqMin = 9020000,
   .freqMax = 9280000,
-  .payloadLenMax = {  19,  61, 133, 250, 250,  58, 133,   0,  61, 137, 250, 250, 250, 250,   0 },
+  .payloadLenMax = {  11,  53, 125, 242, 242,  50, 125,   0,  53, 129, 242, 242, 242, 242,   0 },
   .powerMax = 30,
   .powerNumSteps = 10,
   .dutyCycle = 0,
@@ -103,11 +98,6 @@ const LoRaWANBand_t US915 = {
   .dwellTimeDn = 0,
   .txParamSupported = false,
   .txFreqs = {
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE
-  },
-  .txJoinReq = {
     RADIOLIB_LORAWAN_CHANNEL_NONE,
     RADIOLIB_LORAWAN_CHANNEL_NONE,
     RADIOLIB_LORAWAN_CHANNEL_NONE
@@ -189,7 +179,7 @@ const LoRaWANBand_t EU433 = {
   .bandType = RADIOLIB_LORAWAN_BAND_DYNAMIC,
   .freqMin = 4330000,
   .freqMax = 4340000,
-  .payloadLenMax = {  59,  59,  59, 123, 250, 250, 250, 250,   0,   0,   0,   0,   0,   0,   0 },
+  .payloadLenMax = {  51,  51,  51, 115, 242, 242, 242, 242,   0,   0,   0,   0,   0,   0,   0 },
   .powerMax = 12,
   .powerNumSteps = 5,
   .dutyCycle = 36000,
@@ -197,14 +187,9 @@ const LoRaWANBand_t EU433 = {
   .dwellTimeDn = 0,
   .txParamSupported = false,
   .txFreqs = {
-    { .enabled = true, .idx = 0, .freq = 4331750, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    { .enabled = true, .idx = 1, .freq = 4333750, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    { .enabled = true, .idx = 2, .freq = 4335750, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-  },
-  .txJoinReq = {
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE
+    { .enabled = true, .idx = 0, .freq = 4331750, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
+    { .enabled = true, .idx = 1, .freq = 4333750, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
+    { .enabled = true, .idx = 2, .freq = 4335750, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
   },
   .numTxSpans = 0,
   .txSpans = {
@@ -262,7 +247,7 @@ const LoRaWANBand_t AU915 = {
   .bandType = RADIOLIB_LORAWAN_BAND_FIXED,
   .freqMin = 9150000,
   .freqMax = 9280000,
-  .payloadLenMax = {  59,  59,  59, 123, 250, 250, 250,  58,  61, 137, 250, 250, 250, 250,   0 },
+  .payloadLenMax = {  51,  51,  51, 115, 242, 242, 242,  50,  53, 129, 242, 242, 242, 242,   0 },
   .powerMax = 30,
   .powerNumSteps = 10,
   .dutyCycle = 0,
@@ -270,11 +255,6 @@ const LoRaWANBand_t AU915 = {
   .dwellTimeDn = 0,
   .txParamSupported = true, // conflict: not implemented according to RP v1.1
   .txFreqs = {
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE
-  },
-  .txJoinReq = {
     RADIOLIB_LORAWAN_CHANNEL_NONE,
     RADIOLIB_LORAWAN_CHANNEL_NONE,
     RADIOLIB_LORAWAN_CHANNEL_NONE
@@ -356,7 +336,7 @@ const LoRaWANBand_t CN500 = {
   .bandType = RADIOLIB_LORAWAN_BAND_FIXED,
   .freqMin = 4700000,
   .freqMax = 5100000,
-  .payloadLenMax = {  59,  59,  59, 123, 250, 250,   0,   0,   0,   0,   0,   0,   0,   0,   0 },
+  .payloadLenMax = {  51,  51,  51, 115, 242, 242,   0,   0,   0,   0,   0,   0,   0,   0,   0 },
   .powerMax = 19,
   .powerNumSteps = 7,
   .dutyCycle = 0,
@@ -364,11 +344,6 @@ const LoRaWANBand_t CN500 = {
   .dwellTimeDn = 0,
   .txParamSupported = false,
   .txFreqs = {
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE
-  },
-  .txJoinReq = {
     RADIOLIB_LORAWAN_CHANNEL_NONE,
     RADIOLIB_LORAWAN_CHANNEL_NONE,
     RADIOLIB_LORAWAN_CHANNEL_NONE
@@ -443,7 +418,7 @@ const LoRaWANBand_t AS923 = {
   .bandType = RADIOLIB_LORAWAN_BAND_DYNAMIC,
   .freqMin = 9150000,
   .freqMax = 9280000,
-  .payloadLenMax = {  59,  59, 123, 123, 250, 250, 250, 250,   0,   0,   0,   0,   0,   0,   0 },
+  .payloadLenMax = {  51,  51, 115, 115, 242, 242, 242, 242,   0,   0,   0,   0,   0,   0,   0 },
   .powerMax = 16,
   .powerNumSteps = 7,
   .dutyCycle = 36000,
@@ -451,13 +426,8 @@ const LoRaWANBand_t AS923 = {
   .dwellTimeDn = RADIOLIB_LORAWAN_DWELL_TIME,
   .txParamSupported = true,
   .txFreqs = {
-    { .enabled = true, .idx = 0, .freq = 9232000, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    { .enabled = true, .idx = 1, .freq = 9234000, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    RADIOLIB_LORAWAN_CHANNEL_NONE
-  },
-  .txJoinReq = {
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
+    { .enabled = true, .idx = 0, .freq = 9232000, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
+    { .enabled = true, .idx = 1, .freq = 9234000, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
     RADIOLIB_LORAWAN_CHANNEL_NONE
   },
   .numTxSpans = 0,
@@ -516,7 +486,7 @@ const LoRaWANBand_t AS923_2 = {
   .bandType = RADIOLIB_LORAWAN_BAND_DYNAMIC,
   .freqMin = 9150000,
   .freqMax = 9280000,
-  .payloadLenMax = {  59,  59, 123, 123, 250, 250, 250, 250,   0,   0,   0,   0,   0,   0,   0 },
+  .payloadLenMax = {  51,  51, 115, 115, 242, 242, 242, 242,   0,   0,   0,   0,   0,   0,   0 },
   .powerMax = 16,
   .powerNumSteps = 7,
   .dutyCycle = 36000,
@@ -524,13 +494,8 @@ const LoRaWANBand_t AS923_2 = {
   .dwellTimeDn = RADIOLIB_LORAWAN_DWELL_TIME,
   .txParamSupported = true,
   .txFreqs = {
-    { .enabled = true, .idx = 0, .freq = 9214000, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    { .enabled = true, .idx = 1, .freq = 9216000, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    RADIOLIB_LORAWAN_CHANNEL_NONE
-  },
-  .txJoinReq = {
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
+    { .enabled = true, .idx = 0, .freq = 9214000, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
+    { .enabled = true, .idx = 1, .freq = 9216000, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
     RADIOLIB_LORAWAN_CHANNEL_NONE
   },
   .numTxSpans = 0,
@@ -589,7 +554,7 @@ const LoRaWANBand_t AS923_3 = {
   .bandType = RADIOLIB_LORAWAN_BAND_DYNAMIC,
   .freqMin = 9150000,
   .freqMax = 9280000,
-  .payloadLenMax = {  59,  59, 123, 123, 250, 250, 250, 250,   0,   0,   0,   0,   0,   0,   0 },
+  .payloadLenMax = {  51,  51, 115, 115, 242, 242, 242, 242,   0,   0,   0,   0,   0,   0,   0 },
   .powerMax = 16,
   .powerNumSteps = 7,
   .dutyCycle = 36000,
@@ -597,13 +562,8 @@ const LoRaWANBand_t AS923_3 = {
   .dwellTimeDn = RADIOLIB_LORAWAN_DWELL_TIME,
   .txParamSupported = true,
   .txFreqs = {
-    { .enabled = true, .idx = 0, .freq = 9166000, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    { .enabled = true, .idx = 1, .freq = 9168000, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    RADIOLIB_LORAWAN_CHANNEL_NONE
-  },
-  .txJoinReq = {
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
+    { .enabled = true, .idx = 0, .freq = 9166000, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
+    { .enabled = true, .idx = 1, .freq = 9168000, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
     RADIOLIB_LORAWAN_CHANNEL_NONE
   },
   .numTxSpans = 0,
@@ -662,7 +622,7 @@ const LoRaWANBand_t AS923_4 = {
   .bandType = RADIOLIB_LORAWAN_BAND_DYNAMIC,
   .freqMin = 9170000,
   .freqMax = 9200000,
-  .payloadLenMax = {  59,  59, 123, 123, 250, 250, 250, 250,   0,   0,   0,   0,   0,   0,   0 },
+  .payloadLenMax = {  51,  51, 115, 115, 242, 242, 242, 242,   0,   0,   0,   0,   0,   0,   0 },
   .powerMax = 16,
   .powerNumSteps = 7,
   .dutyCycle = 36000,
@@ -670,13 +630,8 @@ const LoRaWANBand_t AS923_4 = {
   .dwellTimeDn = RADIOLIB_LORAWAN_DWELL_TIME,
   .txParamSupported = true,
   .txFreqs = {
-    { .enabled = true, .idx = 0, .freq = 9173000, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    { .enabled = true, .idx = 1, .freq = 9175000, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    RADIOLIB_LORAWAN_CHANNEL_NONE
-  },
-  .txJoinReq = {
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
+    { .enabled = true, .idx = 0, .freq = 9173000, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
+    { .enabled = true, .idx = 1, .freq = 9175000, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
     RADIOLIB_LORAWAN_CHANNEL_NONE
   },
   .numTxSpans = 0,
@@ -735,7 +690,7 @@ const LoRaWANBand_t KR920 = {
   .bandType = RADIOLIB_LORAWAN_BAND_DYNAMIC,
   .freqMin = 9209000,
   .freqMax = 9233000,
-  .payloadLenMax = {  59,  59,  59, 123, 250, 250,   0,   0,   0,   0,   0,   0,   0,   0,   0 },
+  .payloadLenMax = {  51,  51,  51, 115, 242, 242,   0,   0,   0,   0,   0,   0,   0,   0,   0 },
   .powerMax = 14,
   .powerNumSteps = 7,
   .dutyCycle = 0,
@@ -743,14 +698,9 @@ const LoRaWANBand_t KR920 = {
   .dwellTimeDn = 0,
   .txParamSupported = false,
   .txFreqs = {
-    { .enabled = true, .idx = 0, .freq = 9221000, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    { .enabled = true, .idx = 1, .freq = 9223000, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    { .enabled = true, .idx = 2, .freq = 9225000, .drMin = 0, .drMax = 5, .dr = 5, .available = true }
-  },
-  .txJoinReq = {
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE
+    { .enabled = true, .idx = 0, .freq = 9221000, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
+    { .enabled = true, .idx = 1, .freq = 9223000, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
+    { .enabled = true, .idx = 2, .freq = 9225000, .drMin = 0, .drMax = 5, .dr = 3, .available = true }
   },
   .numTxSpans = 0,
   .txSpans = {
@@ -808,7 +758,7 @@ const LoRaWANBand_t IN865 = {
   .bandType = RADIOLIB_LORAWAN_BAND_DYNAMIC,
   .freqMin = 8650000,
   .freqMax = 8670000,
-  .payloadLenMax = {  59,  59,  59, 123, 250, 250,   0, 250,   0,   0,   0,   0,   0,   0,   0 },
+  .payloadLenMax = {  51,  51,  51, 115, 242, 242,   0, 242,   0,   0,   0,   0,   0,   0,   0 },
   .powerMax = 30,
   .powerNumSteps = 10,
   .dutyCycle = 0,
@@ -816,14 +766,9 @@ const LoRaWANBand_t IN865 = {
   .dwellTimeDn = 0,
   .txParamSupported = false,
   .txFreqs = {
-    { .enabled = true, .idx = 0, .freq = 8650625, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    { .enabled = true, .idx = 1, .freq = 8654025, .drMin = 0, .drMax = 5, .dr = 5, .available = true },
-    { .enabled = true, .idx = 2, .freq = 8659850, .drMin = 0, .drMax = 5, .dr = 5, .available = true }
-  },
-  .txJoinReq = {
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE,
-    RADIOLIB_LORAWAN_CHANNEL_NONE
+    { .enabled = true, .idx = 0, .freq = 8650625, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
+    { .enabled = true, .idx = 1, .freq = 8654025, .drMin = 0, .drMax = 5, .dr = 3, .available = true },
+    { .enabled = true, .idx = 2, .freq = 8659850, .drMin = 0, .drMax = 5, .dr = 3, .available = true }
   },
   .numTxSpans = 0,
   .txSpans = {

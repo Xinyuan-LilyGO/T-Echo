@@ -313,6 +313,14 @@ class SX1278: public SX127x {
       \returns \ref status_codes
     */
     int16_t explicitHeader();
+    
+    /*!
+      \brief Set modem for the radio to use. Will perform full reset and reconfigure the radio
+      using its default parameters.
+      \param modem Modem type to set - FSK or LoRa.
+      \returns \ref status_codes
+    */
+    int16_t setModem(ModemType_t modem) override;
 
 #if !RADIOLIB_GODMODE
   protected:
@@ -320,7 +328,6 @@ class SX1278: public SX127x {
     int16_t setBandwidthRaw(uint8_t newBandwidth);
     int16_t setSpreadingFactorRaw(uint8_t newSpreadingFactor);
     int16_t setCodingRateRaw(uint8_t newCodingRate);
-    int16_t setHeaderType(uint8_t headerType, size_t len = 0xFF);
 
     int16_t configFSK();
     void errataFix(bool rx) override;

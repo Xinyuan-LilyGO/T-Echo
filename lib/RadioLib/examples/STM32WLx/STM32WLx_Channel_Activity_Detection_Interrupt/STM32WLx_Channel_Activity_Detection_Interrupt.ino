@@ -1,16 +1,16 @@
 /*
-   RadioLib STM32WLx Channel Activity Detection Example
+  RadioLib STM32WLx Channel Activity Detection Example
 
-   This example uses STM32WLx to scan the current LoRa
-   channel and detect ongoing LoRa transmissions.
-   Unlike SX127x CAD, SX126x/STM32WLx can detect any part
-   of LoRa transmission, not just the preamble.
+  This example uses STM32WLx to scan the current LoRa
+  channel and detect ongoing LoRa transmissions.
+  Unlike SX127x CAD, SX126x/STM32WLx can detect any part
+  of LoRa transmission, not just the preamble.
 
-   For default module settings, see the wiki page
-   https://github.com/jgromes/RadioLib/wiki/Default-configuration#sx126x---lora-modem
+  For default module settings, see the wiki page
+  https://github.com/jgromes/RadioLib/wiki/Default-configuration#sx126x---lora-modem
 
-   For full API reference, see the GitHub Pages
-   https://jgromes.github.io/RadioLib/
+  For full API reference, see the GitHub Pages
+  https://jgromes.github.io/RadioLib/
 */
 
 // include the library
@@ -32,6 +32,18 @@ static const Module::RfSwitchMode_t rfswitch_table[] = {
   {STM32WLx::MODE_TX_HP, {HIGH, LOW,  HIGH}},
   END_OF_MODE_TABLE,
 };
+
+// flag to indicate that a packet was detected or CAD timed out
+volatile bool scanFlag = false;
+
+// this function is called when a complete packet
+// is received by the module
+// IMPORTANT: this function MUST be 'void' type
+//            and MUST NOT have any arguments!
+void setFlag(void) {
+  // something happened, set the flag
+  scanFlag = true;
+}
 
 void setup() {
   Serial.begin(9600);
@@ -64,18 +76,6 @@ void setup() {
     Serial.print(F("failed, code "));
     Serial.println(state);
   }
-}
-
-// flag to indicate that a packet was detected or CAD timed out
-volatile bool scanFlag = false;
-
-// this function is called when a complete packet
-// is received by the module
-// IMPORTANT: this function MUST be 'void' type
-//            and MUST NOT have any arguments!
-void setFlag(void) {
-  // something happened, set the flag
-  scanFlag = true;
 }
 
 void loop() {

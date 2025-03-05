@@ -27,9 +27,13 @@
 // BUSY pin:  9
 LR1110 radio = new Module(10, 2, 3, 9);
 
-// or using RadioShield
-// https://github.com/jgromes/RadioShield
-//LR1110 radio = RadioShield.ModuleA;
+// or detect the pinout automatically using RadioBoards
+// https://github.com/radiolib-org/RadioBoards
+/*
+#define RADIO_BOARD_AUTO
+#include <RadioBoards.h>
+Radio radio = new RadioModule();
+*/
 
 void setup() {
   Serial.begin(9600);
@@ -58,7 +62,8 @@ void setup() {
                                 3,                                  // header count
                                 0x13A);                             // hopping sequence seed
   state = radio.setOutputPower(10.0);
-  state = radio.setSyncWord(0x12345678);
+  uint8_t syncWord[] = {0x01, 0x23, 0x45, 0x67};
+  state = radio.setSyncWord(syncWord, 4);
   if (state != RADIOLIB_ERR_NONE) {
     Serial.print(F("Unable to set configuration, code "));
     Serial.println(state);
