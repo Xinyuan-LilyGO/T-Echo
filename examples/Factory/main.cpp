@@ -409,23 +409,18 @@ void setup()
     xSemaphoreGive(semHandle);
 
     SerialMon.begin(MONITOR_SPEED);
-    delay(1500);
     // while (!SerialMon);
     SerialMon.println("Start\n");
 
-    SensorWireHelper::dumpDevices(Wire);
+    // SensorWireHelper::dumpDevices(Wire);
     uint32_t reset_reason;
     sd_power_reset_reason_get(&reset_reason);
     SerialMon.print("sd_power_reset_reason_get:0x");
     SerialMon.println(reset_reason, HEX);
 
-    delay(1000);
 
     pinMode(Power_Enable_Pin, OUTPUT);
     digitalWrite(Power_Enable_Pin, HIGH);
-
-    pinMode(Power_Enable1_Pin, OUTPUT);
-    digitalWrite(Power_Enable1_Pin, HIGH);
 
     pinMode(GreenLed_Pin, OUTPUT);
     pinMode(RedLed_Pin, OUTPUT);

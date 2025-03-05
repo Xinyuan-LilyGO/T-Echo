@@ -62,6 +62,21 @@ void setupDisplay()
     display.epd2.selectSPI(*dispPort, SPISettings(4000000, MSBFIRST, SPI_MODE0));
     display.init(/*115200, true, 2, false*/); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
     display.setRotation(3);
+
+    display.setTextColor(GxEPD_BLACK);
+    display.setFont(&FreeMonoBold24pt7b);
+    display.setFullWindow();
+    display.firstPage();
+    int16_t tbx, tby; uint16_t tbw, tbh;
+    do {
+        display.fillScreen(GxEPD_WHITE);
+        const char *title = "BOOTING";
+        display.getTextBounds(title, 0, 0, &tbx, &tby, &tbw, &tbh);
+        uint16_t utx = ((display.width() - tbw) / 2) - tbx;
+        display.setCursor(utx, display.height() / 2);
+        display.print(title);
+    } while (display.nextPage());
+    delay(3000);
 }
 
 
