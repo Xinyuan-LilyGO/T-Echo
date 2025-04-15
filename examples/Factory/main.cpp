@@ -47,6 +47,8 @@ bool probeIMU9250();
 bool beginPDM();
 void drawPDM();
 void loopPDM();
+void deinitPins();
+void sleepFlash();
 
 AceButton button(UserButton_Pin);
 uint32_t        blinkMillis = 0;
@@ -493,10 +495,10 @@ void loop()
     }
     if (gotoSleep) {
 
-        uint8_t counter = 4;
-
         vTaskDelete(led_task_handler);
         vTaskDelete(btn_task_handler);
+
+        sleepFlash();
 
         drawSleep();
 
@@ -514,15 +516,15 @@ void loop()
         digitalWrite(RedLed_Pin, HIGH);
         digitalWrite(BlueLed_Pin, HIGH);
 
-        while (counter--) {
-            Serial.printf("GWill enter sleep mode in %d seconds\n", counter);
-            delay(1000);
-        }
         // setup your wake-up pins.
         detachInterrupt(Touch_Pin);
+
+        deinitPins();
+
         // pinMode(UserButton_Pin,  INPUT_PULLUP_SENSE);    // this pin (WAKE_LOW_PIN) is pulled up and wakes up the feather when externally connected to ground.
         // pinMode(Touch_Pin, INPUT_PULLDOWN_SENSE);        // this pin (WAKE_HIGH_PIN) is pulled down and wakes up the feather when externally connected to 3.3v.
-        // power down nrf52.
+        // power down nrf52. sleep current ~ 1.1mA
+        // Lower shutdown currents require hardware changes, see examples/Sleep_Display/T-Echo_V1.0_PowerConsumptionTest_BLU939(20240909).pdf
         sd_power_system_off(); // this function puts the whole nRF52 to deep sleep (no Bluetooth).  If no sense pins are setup (or other hardware interrupts), the nrf52 will not wake up.
     }
 }
@@ -554,3 +556,54 @@ void deviceProbe(TwoWire &t)
         Serial.println("done\n");
 }
 
+void deinitPins()
+{
+    const uint8_t pins[] = {
+        ePaper_Miso,
+        ePaper_Mosi,
+        ePaper_Sclk,
+        ePaper_Cs,
+        ePaper_Dc,
+        ePaper_Rst,
+        ePaper_Busy,
+        ePaper_Backlight,
+        LoRa_Miso,
+        LoRa_Mosi,
+        LoRa_Sclk,
+        LoRa_Cs,
+        LoRa_Rst,
+        LoRa_Dio0,
+        LoRa_Dio1,
+        LoRa_Dio3,
+        LoRa_Busy,
+        Flash_Cs,
+        Flash_Miso,
+        Flash_Mosi,
+        Flash_Sclk,
+        Flash_WP,
+        Flash_HOLD,
+        Touch_Pin,
+        Adc_Pin,
+        RTC_Int_Pin,
+        Gps_Rx_Pin,
+        Gps_Tx_Pin,
+        Gps_Wakeup_Pin,
+        Gps_Reset_Pin,
+        Gps_pps_Pin,
+        UserButton_Pin,
+
+        Power_Enable_Pin,
+        Power_Enable1_Pin,
+    };
+    for (auto pin : pins) {
+        pinMode(pin, INPUT_PULLDOWN);
+    }
+    const uint8_t leds [] = {
+        GreenLed_Pin,
+        RedLed_Pin,
+        BlueLed_Pin,
+    };
+    for (auto pin : leds) {
+        pinMode(pin, INPUT_PULLUP);
+    }
+}

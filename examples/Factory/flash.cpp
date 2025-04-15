@@ -155,6 +155,8 @@ bool setupFlash()
 
 void sleepFlash()
 {
+    flashTransport.runCommand(0xB9);
+    flash.end();
 }
 
 void wakeupFlash()
