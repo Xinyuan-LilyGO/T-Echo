@@ -10,7 +10,7 @@
 
 3. Open the board installation manager, wait for the index update to complete, select 'Adafruit nRF52 by Adafruit' and click install
 
-4. After the installation is complete, select 'Nordic nRF52840(PCA10056)' in the board list
+4. After the installation is complete, select 'Nordic nRF52840(PCA10056)' or 'Nordic nRF52840 DK' in the board list
 
 5. Copy all the folders in the lib directory to `"C:\User\<YourName>\Documents\Arduino\libraries"`
 
