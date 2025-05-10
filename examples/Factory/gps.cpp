@@ -363,7 +363,8 @@ void loopGPS()
 void sleepGPS()
 {
     SerialGPS.end();
-    pinMode(Gps_Wakeup_Pin, INPUT);
+    pinMode(Gps_Wakeup_Pin, OUTPUT);
+    digitalWrite(Gps_Wakeup_Pin, LOW);
     pinMode(Gps_Reset_Pin, INPUT);
     pinMode(Gps_pps_Pin, INPUT);
     pinMode(Gps_Rx_Pin, INPUT);

@@ -587,7 +587,6 @@ void deinitPins()
         RTC_Int_Pin,
         Gps_Rx_Pin,
         Gps_Tx_Pin,
-        Gps_Wakeup_Pin,
         Gps_Reset_Pin,
         Gps_pps_Pin,
         UserButton_Pin,
