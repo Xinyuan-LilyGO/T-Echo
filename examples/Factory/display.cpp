@@ -37,7 +37,7 @@ static uint8_t bri_duty = 15;
 
 void adjustBacklight()
 {
-    bri_duty += 15;
+    bri_duty += 51;     //level 5
     bri_duty %= 255;
     HwPWM0.writePin(ePaper_Backlight, bri_duty, false);
 }
@@ -50,7 +50,7 @@ void setupDisplay()
     HwPWM0.setResolution(8);
     HwPWM0.setClockDiv(PWM_PRESCALER_PRESCALER_DIV_1); // freq = 16Mhz
     HwPWM0.begin();
-    HwPWM0.writePin(ePaper_Backlight, 15, false);
+    HwPWM0.writePin(ePaper_Backlight, 51, false);
 
 
     dispPort = new SPIClass(
@@ -60,7 +60,7 @@ void setupDisplay()
         /*MOSI*/ePaper_Mosi);
 
     display.epd2.selectSPI(*dispPort, SPISettings(4000000, MSBFIRST, SPI_MODE0));
-    display.init(/*115200, true, 2, false*/); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
+    display.init(); 
     display.setRotation(3);
 
     display.setTextColor(GxEPD_BLACK);
