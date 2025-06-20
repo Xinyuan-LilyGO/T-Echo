@@ -18,6 +18,9 @@ static uint32_t         interval = 0;
 static uint32_t         prevCharsProcessed = 0;
 static bool             syncDateTime = false;
 String                  gpsVersion = "";
+uint32_t                gps_start_ms = 0;
+uint32_t                gps_use_second = 0;
+bool                    update_use_second = false;
 
 /***********************************
    _____   _____     _____
@@ -101,6 +104,9 @@ bool gps_probe()
     delay(250);
     // Switch to Vehicle Mode, since SoftRF enables Aviation < 2g
     SerialGPS.write("$PCAS11,3*1E\r\n");
+
+    gps_start_ms = millis();
+
     return true;
 }
 
@@ -273,6 +279,15 @@ void loopGPS()
 
     uint32_t charsProcessed = gps->charsProcessed();
 
+    bool location = gps->location.isValid();
+    bool datetime = (gps->date.year() > 2000);
+
+
+    if (location && datetime && !update_use_second) {
+        update_use_second = true;
+        gps_use_second = (millis() - gps_start_ms) / 1000;
+    }
+
     if (millis() - interval > 5000) {
 
         uint16_t bgColor = GxEPD_WHITE;
@@ -308,6 +323,11 @@ void loopGPS()
                             display.print("No DATA");
                         } else {
                             display.print(charsProcessed);
+                            if (update_use_second) {
+                                display.print("/");
+                                display.print(gps_use_second);
+                                display.print("S");
+                            }
                         }
                         break;
                     case 1:
