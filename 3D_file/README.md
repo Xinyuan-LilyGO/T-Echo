@@ -1,1 +1,3 @@
-## This is 3d file 
+# T-BHI260-ICM29048
+
+![T-BHI260](./T-BHI260.png)
