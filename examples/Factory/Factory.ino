@@ -466,7 +466,7 @@ void setup()
     xSemaphoreGive(semHandle);
 
     SerialMon.begin(MONITOR_SPEED);
-    while (!SerialMon);
+    // while (!SerialMon);
     SerialMon.println("Start\n");
 
 
