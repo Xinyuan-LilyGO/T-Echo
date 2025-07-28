@@ -28,6 +28,7 @@
 #include <MPU9250.h>
 #include <SensorBHI260AP.hpp>
 #include <SensorWireHelper.h>
+#include <SensorDRV2605.hpp>
 
 #define BOSCH_APP30_SHUTTLE_BHI260_FW
 #include <BoschFirmware.h>
@@ -78,7 +79,7 @@ struct _callback {
 
 funcFirstCallBackTypedef prevFirstFunc = NULL;
 
-const uint8_t index_max = sizeof(LilyGoCallBack) / sizeof(LilyGoCallBack[0]);
+uint8_t index_max = sizeof(LilyGoCallBack) / sizeof(LilyGoCallBack[0]);
 xSemaphoreHandle semHandle = NULL;
 
 /* There are several ways to create your ICM20948 object:
@@ -94,6 +95,8 @@ ICM20948_WE IMU = ICM20948_WE(ICM20948_ADDR);
 MPU9250 IMU_9250;
 SensorBHI260AP bhy;
 
+SensorDRV2605 drv;
+
 typedef enum {
     nRF52_RESETPIN = 1,         /*Reset from pin-reset detected*/
     nRF52_DOG,                  /*Reset from watchdog detected*/
@@ -105,6 +108,20 @@ typedef enum {
     nRF52_NFC,                  /*Reset due to wake up from System OFF mode by NFC field*/
     nRF52_VBUS,                 /*Reset due to wake up from System OFF mode by VBUS rising*/
 } nRF52_ResetReason;
+
+
+void motor_shield_tone()
+{
+    if (isBitSet(devices_probe_mask, 10)) {
+        // set the effect to play
+        drv.setWaveform(0, 75);  // play effect
+        drv.setWaveform(1, 0);       // end waveform
+        // play the effect!
+        drv.run();
+
+        tone(BUZZER_PIN, 1000, 200);
+    }
+}
 
 void handleEvent(AceButton *button, uint8_t eventType, uint8_t buttonState)
 {
@@ -122,6 +139,9 @@ void handleEvent(AceButton *button, uint8_t eventType, uint8_t buttonState)
         sleepIn = false;
         if (xSemaphoreTake(semHandle, portMAX_DELAY)) {
             xSemaphoreGive(semHandle);
+
+            motor_shield_tone();
+
             funcSelectIndex++;
             funcSelectIndex %= index_max;
             Serial.print("funcSelectIndex:");
@@ -401,6 +421,41 @@ bool probeBHY260AP()
     return true;
 }
 
+bool probeDRV2605()
+{
+    if (!drv.begin(Wire)) {
+        SerialMon.print("DRV2605 failed to initialize sensor");
+        return false;
+    }
+
+    SerialMon.println("DRV2605 init successfully!");
+
+    drv.selectLibrary(1);
+    // I2C trigger by sending 'run' command
+    // default, internal trigger when sending RUN command
+    drv.setMode(SensorDRV2605::MODE_INTTRIG);
+
+    // Set Drv2605 enable to HIGH ,enable this devices
+    pinMode(DRV2605_ENABLE_PIN, OUTPUT);
+
+    digitalWrite(DRV2605_ENABLE_PIN, HIGH);
+
+    return true;
+}
+
+
+void setupBuzzer()
+{
+    pinMode(BUZZER_PIN, OUTPUT);
+    digitalWrite(BUZZER_PIN, LOW);
+}
+
+bool probeDevices(uint8_t address)
+{
+    Wire.beginTransmission(address);
+    return (Wire.endTransmission() == 0) ;
+}
+
 void setup()
 {
     Wire.setPins(SDA_Pin, SCL_Pin);
@@ -411,8 +466,11 @@ void setup()
     xSemaphoreGive(semHandle);
 
     SerialMon.begin(MONITOR_SPEED);
-    // while (!SerialMon);
+    while (!SerialMon);
     SerialMon.println("Start\n");
+
+
+    deviceProbe(Wire);
 
     // SensorWireHelper::dumpDevices(Wire);
     uint32_t reset_reason;
@@ -456,21 +514,50 @@ void setup()
 
     devices_probe_mask |= setupInternalFileSystem() ? bit(6) : 0;
 
-    Wire.beginTransmission(0x68);
-    if (Wire.endTransmission() == 0) {
+    // Check if the IMU chip exists
+    if (probeDevices(0x68)) {
         devices_probe_mask |= probeIMU20948() ? bit(7) : 0 ;
         devices_probe_mask |= probeIMU9250() ? bit(8) : 0 ;
     }
 
-    Wire.beginTransmission(0x28);
-    if (Wire.endTransmission() == 0) {
+    // Check if the BHI260 sensor is present
+    if (probeDevices(0x28)) {
         devices_probe_mask |= probeBHY260AP() ? bit(9) : 0;
+
+        // Check if the DRV2605 vibration driver chip is present
+        if (probeDevices(0x5A)) {
+
+            devices_probe_mask |= probeDRV2605() ? bit(10) : 0;
+
+            // If the DRV2605 vibration chip exists, then it is a DRV2605 + buzzer combination
+            setupBuzzer();
+
+            index_max--;
+
+        } else {
+
+            // If the vibration chip does not exist, it is the BHI260 + microphone combination
+            beginPDM();
+
+        }
+    } else {
+
+        // Check if the DRV2605 vibration driver chip is present
+        if (probeDevices(0x5A)) {
+            devices_probe_mask |= probeDRV2605() ? bit(10) : 0;
+            // If the DRV2605 vibration chip exists, then it is a DRV2605 + buzzer combination
+            setupBuzzer();
+        }
     }
 
-    beginPDM();
 
     pinMode(Touch_Pin, INPUT_PULLDOWN);
     attachInterrupt(Touch_Pin, []() {
+
+        if (isBitSet(devices_probe_mask, 10)) {
+            tone(BUZZER_PIN, 1000, 200);
+        }
+
         adjustBacklight();
     }, RISING);
 

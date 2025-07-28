@@ -73,7 +73,9 @@
 
 #define MONITOR_SPEED       115200
 
-
+// Motor & Buzzer Shield
+#define DRV2605_ENABLE_PIN  8
+#define BUZZER_PIN          6
 
 
 #define COUNT_SIZE(x)   (sizeof(x)/sizeof(*x))
