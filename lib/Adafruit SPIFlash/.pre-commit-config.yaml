@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: 2020 Diego Elio Pettenò
+#
+# SPDX-License-Identifier: Unlicense
+
+repos:
+- repo: https://github.com/pre-commit/mirrors-clang-format
+  rev: v15.0.7
+  hooks:
+  - id: clang-format
+    exclude: |
+      (?x)^(
+        examples/SdFat_format|
+        tools
+      )
+    types_or: [c++, c, header]
+
+- repo: https://github.com/codespell-project/codespell
+  rev: v2.2.4
+  hooks:
+  - id: codespell
+    args: [-w]
+    exclude: |
+      (?x)^(
+        examples/SdFat_format/ff.c|
+        examples/SdFat_format/ff.h
+      )
