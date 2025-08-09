@@ -458,6 +458,10 @@ bool probeDevices(uint8_t address)
 
 void setup()
 {
+    // First turn on power pin
+    pinMode(Power_Enable_Pin, OUTPUT);
+    digitalWrite(Power_Enable_Pin, HIGH);
+
     Wire.setPins(SDA_Pin, SCL_Pin);
     Wire.begin();
 
@@ -479,8 +483,6 @@ void setup()
     SerialMon.println(reset_reason, HEX);
 
 
-    pinMode(Power_Enable_Pin, OUTPUT);
-    digitalWrite(Power_Enable_Pin, HIGH);
 
     pinMode(GreenLed_Pin, OUTPUT);
     pinMode(RedLed_Pin, OUTPUT);
