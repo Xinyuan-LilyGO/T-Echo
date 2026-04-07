@@ -86,56 +86,56 @@ If you need to restore the factory firmware or flash the UnitTest firmware for h
 
 ### T-echo pinout
 
-| Name              | Chip pin number | Arduino pin number | Note                                              |
-| ----------------- | --------------- | ------------------ | ------------------------------------------------- |
-| Display           | Display         | Display            | Display                                           |
-| Display MOSI      | P1.6            | 36                 |                                                   |
-| Display MISO      | P0.29           | 29                 |                                                   |
-| Display SCLK      | P0.31           | 31                 |                                                   |
-| Display BUSY      | P0.3            | 3                  |                                                   |
-| Display DC        | P0.28           | 28                 |                                                   |
-| Display CS        | P0.30           | 30                 |                                                   |
-| Display RST       | P0.2            | 2                  |                                                   |
-| Display backlight | P1.11           | 43                 |                                                   |
-| LoRa              | LoRa            | LoRa               | LoRa                                              |
-| LoRa MOSI         | P0.22           | 22                 |                                                   |
-| LoRa MISO         | P0.23           | 23                 |                                                   |
-| LoRa SCLK         | P0.19           | 19                 |                                                   |
-| LoRa BUSY         | P0.17           | 17                 |                                                   |
-| LoRa CS           | P0.24           | 24                 |                                                   |
-| LoRa RST          | P0.25           | 25                 |                                                   |
-| LoRa DIO0         | P0.22           | 22                 |                                                   |
-| LoRa DIO1         | P0.20           | 20                 |                                                   |
-| LoRa DIO3         | P0.21           | 21                 |                                                   |
-| GPS               | GPS             | GPS                | GPS                                               |
-| GPS TX            | P1.8            | 40                 |                                                   |
-| GPS RX            | P1.9            | 41                 |                                                   |
-| GPS PPS           | P1.4            | 36                 |                                                   |
-| GPS Wakeup        | P1.2            | 34                 |                                                   |
-| GPS RESET         | P1.5            | 37                 |                                                   |
-| LED               | LED             | LED                | LED                                               |
-| Red LED           | P1.3            | 35                 |                                                   |
-| Blue LED          | P0.14           | 14                 |                                                   |
-| Green LED         | P1.1            | 33                 |                                                   |
-| BUTTON            | BUTTON          | BUTTON             | BUTTON                                            |
-| RESET             | P0.18           | 18                 | Reset device, cannot be used for other functions. |
-| User Button       | P1.10           | 42                 | Low level active                                  |
-| FLASH             | FLASH           | FLASH              | FLASH                                             |
-| QSPI SCLK         | P1.14           | 46                 | SPI SCK                                           |
-| QSPI CS           | P1.15           | 47                 | SPI CS                                            |
-| QSPI IO0          | P1.12           | 44                 | SPI MOSI                                          |
-| QSPI IO1          | P1.13           | 45                 | SPI MISO                                          |
-| QSPI IO2          | P0.7            | 7                  | SPI NC                                            |
-| QSPI IO3          | P0.5            | 5                  | SPI NC                                            |
-| Touch Button      | P0.11           | 11                 | High level active                                 |
-| Battery ADC       | P0.4            | 4                  |                                                   |
-| RTC               | RTC             | RTC                | RTC                                               |
-| PCF8563 SDA       | P0.26           | 26                 | Share I2C Bus                                     |
-| PCF8563 SCL       | P0.27           | 27                 | Share I2C Bus                                     |
-| PCF8563 IRQ       | P0.16           | 16                 |                                                   |
-| SENSOR            | SENSOR          | SENSOR             | SENSOR                                            |
-| BEM280 SDA        | P0.26           | 26                 | Share I2C Bus                                     |
-| BEM280 SCL        | P0.27           | 27                 | Share I2C Bus                                     |
+| Name                 | Chip pin number | Arduino pin number | Note                                              |
+| -------------------- | --------------- | ------------------ | ------------------------------------------------- |
+| Display              | Display         | Display            | Display                                           |
+| Display MOSI         | P1.6            | 36                 |                                                   |
+| Display MISO         | P0.29           | 29                 |                                                   |
+| Display SCLK         | P0.31           | 31                 |                                                   |
+| Display BUSY         | P0.3            | 3                  |                                                   |
+| Display DC           | P0.28           | 28                 |                                                   |
+| Display CS           | P0.30           | 30                 |                                                   |
+| Display RST          | P0.2            | 2                  |                                                   |
+| Display backlight    | P1.11           | 43                 |                                                   |
+| LoRa                 | LoRa            | LoRa               | LoRa                                              |
+| LoRa MOSI            | P0.22           | 22                 |                                                   |
+| LoRa MISO            | P0.23           | 23                 |                                                   |
+| LoRa SCLK            | P0.19           | 19                 |                                                   |
+| LoRa BUSY            | P0.17           | 17                 |                                                   |
+| LoRa CS              | P0.24           | 24                 |                                                   |
+| LoRa RST             | P0.25           | 25                 |                                                   |
+| LoRa DIO0            | P0.22           | 22                 |                                                   |
+| LoRa DIO1            | P0.20           | 20                 |                                                   |
+| LoRa DIO3            | P0.21           | 21                 |                                                   |
+| GPS                  | GPS             | GPS                | GPS                                               |
+| [GPS L76K][8] TX     | P1.8            | 40                 |                                                   |
+| [GPS L76K][8] RX     | P1.9            | 41                 |                                                   |
+| [GPS L76K][8] PPS    | P1.4            | 36                 |                                                   |
+| [GPS L76K][8] Wakeup | P1.2            | 34                 |                                                   |
+| [GPS L76K][8] RESET  | P1.5            | 37                 |                                                   |
+| LED                  | LED             | LED                | LED                                               |
+| Red LED              | P1.3            | 35                 |                                                   |
+| Blue LED             | P0.14           | 14                 |                                                   |
+| Green LED            | P1.1            | 33                 |                                                   |
+| BUTTON               | BUTTON          | BUTTON             | BUTTON                                            |
+| RESET                | P0.18           | 18                 | Reset device, cannot be used for other functions. |
+| User Button          | P1.10           | 42                 | Low level active                                  |
+| FLASH                | FLASH           | FLASH              | FLASH                                             |
+| QSPI SCLK            | P1.14           | 46                 | SPI SCK                                           |
+| QSPI CS              | P1.15           | 47                 | SPI CS                                            |
+| QSPI IO0             | P1.12           | 44                 | SPI MOSI                                          |
+| QSPI IO1             | P1.13           | 45                 | SPI MISO                                          |
+| QSPI IO2             | P0.7            | 7                  | SPI NC                                            |
+| QSPI IO3             | P0.5            | 5                  | SPI NC                                            |
+| Touch Button         | P0.11           | 11                 | High level active                                 |
+| Battery ADC          | P0.4            | 4                  |                                                   |
+| RTC                  | RTC             | RTC                | RTC                                               |
+| PCF8563 SDA          | P0.26           | 26                 | Share I2C Bus                                     |
+| PCF8563 SCL          | P0.27           | 27                 | Share I2C Bus                                     |
+| PCF8563 IRQ          | P0.16           | 16                 |                                                   |
+| SENSOR               | SENSOR          | SENSOR             | SENSOR                                            |
+| BEM280 SDA           | P0.26           | 26                 | Share I2C Bus                                     |
+| BEM280 SCL           | P0.27           | 27                 | Share I2C Bus                                     |
 
 > **Note:** t-echo and t-echo plus use the same pinout.
 
@@ -184,6 +184,7 @@ If you need to restore the factory firmware or flash the UnitTest firmware for h
 [4]: https://www.ti.com/lit/ds/symlink/drv2605.pdf
 [5]: https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bhi260ab-ds000.pdf
 [6]: https://www.nxp.com/docs/en/data-sheet/PCF8563.pdf
+[8]: https://www.quectel.com.cn/product/gnss-l76k
 
 ### ⚡ Electrical Parameters
 
