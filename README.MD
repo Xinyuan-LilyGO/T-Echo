@@ -254,8 +254,8 @@ The following test results show the antenna performance:
 - [T-BHI260 V1.1](./schematic/T-BHI260_V1.1.pdf)
 - [T-BHI260](./schematic/T-BHI260_V1.1.pdf)
 - [T-ICM29048](./schematic/T-ICM29048.pdf)
-- [T-ECHO-BEEP](./schematic/T-ECHO-BEEP V1.0 25-07-31.pdf)
-- [T-ECHO-CON](./schematic/T-ECHO-CON V1.0 25-02-20.pdf)
+- [T-ECHO-BEEP](./schematic/T-ECHO-BEEP%20V1.0%2025-07-31.pdf)
+- [T-ECHO-CON](./schematic/T-ECHO-CON%20V1.0%2025-02-20.pdf)
 
 ## 📐 Case & Dimensions
 
