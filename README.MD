@@ -24,6 +24,8 @@
     - [Charger LED Status](#charger-led-status)
   - [⏺︎ Button](#︎-button)
 - [📡 Antenna Actual Test Reference](#-antenna-actual-test-reference)
+- [📄 Datasheet](#-datasheet)
+- [📐 Case \& Dimensions](#-case--dimensions)
 - [📱 Application](#-application)
 - [⚠️ Precautions](#️-precautions)
 - [🔋 Battery Life](#-battery-life)
@@ -243,6 +245,25 @@ The following test results show the antenna performance:
 </p>
 
 ---
+
+## 📄 Datasheet
+
+- [T-echo and plus](./schematic/T-Echo_Schematic.pdf)
+- [T-echo a7682](./schematic/T-ECHO-A7682.pdf)
+- [T-BHI260 V1.0](./schematic/T-BHI260.pdf)
+- [T-BHI260 V1.1](./schematic/T-BHI260_V1.1.pdf)
+- [T-BHI260](./schematic/T-BHI260_V1.1.pdf)
+- [T-ICM29048](./schematic/T-ICM29048.pdf)
+- [T-ECHO-BEEP](./schematic/T-ECHO-BEEP V1.0 25-07-31.pdf)
+- [T-ECHO-CON](./schematic/T-ECHO-CON V1.0 25-02-20.pdf)
+
+## 📐 Case & Dimensions
+
+- [T-BHI260-ICM29048 DXF](./dimensions/T-BHI260-ICM29048.dxf)
+- [T-echo 3d](./dimensions/t-echo_3d.stl)
+- [T-echo-plus BackCover](./dimensions/t-echo-plus-back-cover.7z)
+- [T-BHI260.kicad_mod](https://github.com/Xinyuan-LilyGO/T-Display-S3-Pro/blob/master/schematic/kicad_sensor.pretty/T-BHI260.kicad_mod)
+- [T-CIM29048.kicad_mod](https://github.com/Xinyuan-LilyGO/T-Display-S3-Pro/blob/master/schematic/kicad_sensor.pretty/T-CIM29048.kicad_mod)
 
 ## 📱 Application
 
