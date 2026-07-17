@@ -240,9 +240,22 @@ If you need to restore the factory firmware or flash the UnitTest firmware for h
 The following test results show the antenna performance:
 
 <p align="center" width="100%">
-    <img src="image/image1.jpg" alt="Antenna test results 1" width="45%"/>
-    <img src="image/image2.jpg" alt="Antenna test results 2" width="45%"/>
+    <img src="image/image1.jpg" alt="868MHZ" width="45%"/>
+    <img src="image/image2.jpg" alt="915MHZ" width="45%"/>
 </p>
+
+* The left image shows 868MHz, and the right image shows 915MHz.
+
+> [!IMPORTANT]
+> The antenna on the T-Echo is tuned to its optimal parameters based on the overall device setup. The image below compares the network analyzer results with the antenna installed separately and with the antenna installed on the main unit. It shows that the antenna's performance is not ideal when tested alone, but becomes much better when installed on the main unit.
+>
+
+<p align="center" width="100%">
+    <img src="image/echo-868-extension-cable.png" alt="Whole machine testing" width="45%"/>
+    <img src="image/echo-868-no-extension-cable.png" alt="Individual antenna" width="45%"/>
+</p>
+
+* The left image shows the entire device, and the right image shows a single antenna.
 
 ---
 
