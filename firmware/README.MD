@@ -18,7 +18,7 @@
 
 | Firmware File      | Description                                                                                                                                                                                                     |
 | :----------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `factory-xxx.uf2` | Includes LoRa transceiver, BLE connection, and all hardware test items. For BLE testing, download [nRF Connect](https://www.nordicsemi.com/Products/Development-tools/nrf-connect-for-mobile) from Google Play. |
+| `factory-xxx.uf2` | Includes LoRa transceiver, BLE connection, and all hardware test items. For BLE testing, download [nRF Connect](https://www.nordicsemi.com/Products/Development-tools/nrf-connect-for-mobile) from Google Play or Apple App Store. |
 | `gps_factory.uf2`  | Used to diagnose hardware issues and test GPS functionality.                                                                                                                                                    |
 
 ---
