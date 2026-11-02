@@ -34,6 +34,9 @@ firmware/
 ├── factory.uf2         # Factory debug test firmware
 ├── gps_factory.uf2     # GPS NMEA output firmware
 ```
+> [!TIP]
+> `factory-debug.uf2` prevents the device from booting until a serial monitor is connected. The device will not start unless a serial monitor is attached; once connected, it will begin booting and outputting diagnostic logs. Please note that for most serial monitors, you must enable the **DTR** option to view the logs output by the T-Echo. The serial monitor baud rate should be set to 115200.
+> 
 
 ---
 
